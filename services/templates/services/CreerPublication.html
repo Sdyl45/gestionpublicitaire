@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+
+{% block body %}
+
+<title>Créer une publicité</title>
+  <style>
+    /* Style de base */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    form {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      grid-gap: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, textarea, select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Créer une publicité</h1>
+    <form>
+      <label for="title">Titre :</label>
+      <input type="text" id="title" name="title" required>
+
+      <label for="description">Description :</label>
+      <textarea id="description" name="description" rows="3" required></textarea>
+
+      <label for="type">Type de contenu :</label>
+      <select id="type" name="type" required>
+        <option value="">Sélectionner un type</option>
+        <option value="video">Vidéo</option>
+        <option value="image">Image</option>
+        <option value="text">Texte</option>
+      </select>
+
+      <label for="file">Fichier :</label>
+      <input type="file" id="file" name="file" required>
+
+      <button type="submit">Créer la publicité</button>
+    </form>
+  </div>
+
+
+{% endblock %}
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+    {% block body %}
+
+ <style>
+    /* Reset de base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Styles généraux */
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f0f2f5;
+      color: #1c1e21;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+
+    /* Styles de l'en-tête */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .header button {
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Styles du formulaire */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccd0d5;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .form-group textarea {
+      height: 150px;
+    }
+
+    .form-group button {
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+ <div class="container">
+   <div class="header">
+     <h1>Créer une Campagne</h1>
+   </div>
+   <form>
+     <div class="form-group">
+       <label for="campaign-name">Nom de la Campagne</label>
+       <input type="text" id="campaign-name" name="campaign-name" required>
+     </div> <div class="form-group"> <label for="audience">Audience</label>
+     <input type="text" id="audience" name="audience" required>
+   </div>
+     <div class="form-group">
+       <label for="interaction">Objectif de la Campagne</label>
+       <div class="form-check">
+         <input class="form-check-input" type="checkbox" value="interaction" id="interaction" name="campaign-objective">
+         <label class="form-check-label" for="interaction"> Interaction avec une publication </label>
+       </div> <div class="form-check">
+       <input class="form-check-input" type="checkbox" value="video-views" id="video-views" name="campaign-objective">
+       <label class="form-check-label" for="video-views"> Vues de vidéos</label>
+     </div>
+       <div class="form-check">
+         <input class="form-check-input" type="checkbox" value="reach" id="reach" name="campaign-objective">
+         <label class="form-check-label" for="reach"> Couverture </label>
+       </div> <div class="form-check">
+       <input class="form-check-input" type="checkbox" value="website-traffic" id="website-traffic" name="campaign-objective">
+       <label class="form-check-label" for="website-traffic"> Trafic sur le site web </label>
+     </div>
+       <div class="form-check">
+         <input class="form-check-input" type="checkbox" value="messages" id="messages" name="campaign-objective">
+         <label class="form-check-label" for="messages"> Messages </label>
+       </div>
+       <div class="form-check">
+         <input class="form-check-input" type="checkbox" value="page-likes" id="page-likes" name="campaign-objective">
+         <label class="form-check-label" for="page-likes"> Mentions J'aime la page </label>
+       </div>
+     </div>
+     <div class="form-group">
+       <label for="campaign-description">Description de la Campagne</label>
+       <textarea id="campaign-description" name="campaign-description" rows="5" required></textarea>
+     </div>
+     <div class="form-group">
+       <a href="{%url 'publication'%}" class="btn btn-danger" type="submit">Créer l'Annonce</a>
+     </div>
+   </form>
+ </div>
+
+
+
+
+                <!-- /.container-fluid -->
+
+
+            <!-- End of Main Content -->
+
+    {% endblock  %}
+
+
+</body>
+
+</html>

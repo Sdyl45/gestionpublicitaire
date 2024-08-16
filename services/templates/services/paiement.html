@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+
+
+<style>
+    /* Styles généraux */
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Styles du formulaire */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccd0d5;
+      border-radius: 3px;
+      font-size: 16px;
+    }
+
+    .payment-options {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .payment-option {
+      background-color: #ffffff;
+      border: 1px solid #ccd0d5;
+      border-radius: 3px;
+      padding: 10px;
+      text-align: center;
+      flex-basis: 45%;
+      cursor: pointer;
+    }
+
+    .payment-option.selected {
+      border-color: #1877f2;
+    }
+
+    .payment-option img {
+      max-width: 100px;
+      height: auto;
+    }
+
+    button {
+      background-color: #1877f2;
+      color: #ffffff;
+      border: none;
+      border-radius: 3px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1366d6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Paiement</h1>
+    <form>
+      <div class="form-group">
+        <label for="amount">Montant</label>
+        <input type="number" id="amount" name="amount" required>
+      </div>
+      <div class="payment-options">
+        <div class="payment-option selected">
+          <img src="{% static 'images/orangelogo.jpg' %}" alt="Orange">
+          <p>Orange Money</p>
+        </div>
+        <div class="payment-option">
+          <img src="{% static 'images/mtnlogo.png' %}" alt="MTN">
+          <p>MTN Mobile Money</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="phone-number">Numéro de Téléphone</label>
+        <input type="text" id="phone-number" name="phone-number" required>
+      </div>
+      <div class="form-group">
+        <button type="submit">Payer</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Sélection de l'option de paiement
+    const paymentOptions = document.querySelectorAll('.payment-option');
+    paymentOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        paymentOptions.forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+      });
+    });
+  </script>
+
+
+{% endblock %}
+
+
+
+</body>
+
+</html>

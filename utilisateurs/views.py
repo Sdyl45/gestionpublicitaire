@@ -9,3 +9,7 @@ def register(request):
 
 def forgot_password(request):
     return render(request, 'utilisateurs/forgot-password.html')
+
+
+
+
