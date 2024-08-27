@@ -1,35 +1,37 @@
 from django.urls import path
-from .views import *
+
+from . import views
 
 urlpatterns = [
- path("", index, name="index"),
+ path("", views.index, name="index"),
 
 
 
- path("Addutilisateurs", userViews, name="utilisateurs"),
- path("utilisateursList", listUserViews, name="Userlist"),
+ path("Addutilisateurs", views.userViews, name="utilisateurs"),
+ path("utilisateursList", views.listUserViews, name="Userlist"),
+
+
+path('campagnes/', views.campaign_list, name='CampagneList'),
+ path('campaigns/create/', views.create_campaign, name='campagne'),
+ path("AddRapport", views.RapportsCampViews, name="rapport"),
 
 
 
-path("mesCampagnes", ListCampagneViews, name="CampagneList"),
- path("CampList", AddCampagneViews, name="campagne"),
- path("AddRapport", RapportsCampViews, name="rapport"),
-
-
-
-path("AddPub", AddPublicationViews, name="publication"),
-path("listPub", ListPublicationViews, name="listPubs"),
-
-
-
-path("AddAudience", AudiencesViews, name="audience"),
-path("paie", PaiementViews, name="paiement"),
+path("AddPub", views.AddPublicationViews, name="publication"),
+path("listPub", views.ListPublicationViews, name="listPubs"),
 
 
 
 
+path('audiences/create/', views.create_audience, name='create_audience'),
+path('audiences/', views.audience_list, name='audience_list'),
+path("paie", views.PaiementViews, name="paiement"),
 
 
-path("chatter",ChatsViews, name="chat"),
-path("profile",ProfileViews, name="profil")
+
+
+
+path('locations/create/', views.create_location, name='create_location'),
+path("chatter",views.ChatsViews, name="chat"),
+path("profile",views.ProfileViews, name="profil")
 ]

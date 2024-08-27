@@ -5,9 +5,9 @@
         <div class="col-12 col-lg-8">
             <div class="card shadow-sm">
                 <div class="card-header bg-dander text-white d-flex justify-content-between align-items-center">
-                    <h5 style="color: red; text-align: center; font-size:24px" class="mb-0">LISTE DES CAMPAGNES</h5>
-                    <a style="padding: 5px 10px; background-color: red; margin-bottom:20px;" href="{% url 'campagne' %}" type="button" class="btn btn-danger btn-sm">
-                         Ajouter une campagne
+                    <h5 style="color: red; text-align: center; font-size:24px" class="mb-0">LISTE DES AUDIENCES</h5>
+                    <a style="padding: 5px 10px; background-color: red; margin-bottom:20px;" href="{% url 'create_audience' %}" type="button" class="btn btn-danger btn-sm">
+                         Ajouter une audience
                     </a>
                 </div>
                 <div class="card-body">
@@ -18,21 +18,30 @@
                                     <th style="margin-right:15px;">ID</th>
                                     <th>Nom</th>
                                     <th>Description</th>
-                                    <th>Date debut</th>
-                                    <th>Date fin</th>
-                                    <th>Budget</th>
+                                    <th>Age min</th>
+                                    <th>Age max</th>
+                                    <th>Sexe</th>
+                                    <th>Localisation</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for campagne in campaigns %}
+                                {% for audience in audiences %}
                                 <tr style="margin-left:50px;">
-                                    <td>{{campagne.id}}</td>
-                                    <td>{{ campagne.nom }}</td>
-                                    <td>{{ campagne.description | truncatechars:5 }}</td>
-                                    <td>{{ campagne.start_date }}</td>
-                                    <td>{{ campagne.end_date }}</td>
-                                    <td>{{ campagne.budget }}</td>
+                                    <td>{{audience.id}}</td>
+                                    <td>{{ audience.nom }}</td>
+                                    <td>{{ audience.description | truncatechars:5 }}</td>
+                                    <td>{{ audience.age_min }}</td>
+                                    <td>{{ audience.age_max }}</td>
+                                    <td>{{ audience.gender }}</td>
+                                    <td>{{ audience.interests }}</td>
+                                    <td>{{ audience.location }}</td>
+
+
+
+
+
+
 
 
                                     <td>

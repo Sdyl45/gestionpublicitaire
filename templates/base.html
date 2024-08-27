@@ -31,7 +31,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark  accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{%  url 'index'%}">
@@ -68,7 +68,7 @@
                     <span>Utilisateurs</span>
                 </a>
                 <div id="collapseTwo00" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="bg-danger py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Mes utilisateurs:</h6>
                         <a class="collapse-item" href="{% url 'utilisateurs'%}">Creation des utilisateurs</a>
                         <a class="collapse-item" href="{% url 'Userlist'%}">Listes des utilisateurs </a>
@@ -85,7 +85,7 @@
                 </a>
                 <div id="collapseUtilities1" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="bg-danger py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Mes campagnes:</h6>
                         <a class="collapse-item" href="{% url 'campagne'%}">Creation d'une campagne</a>
                         <a class="collapse-item" href="{% url 'CampagneList'%}">listes des campagnes</a>
@@ -104,9 +104,9 @@
                 </a>
                 <div id="collapseUtilitie" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="bg-danger py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Mes Publications:</h6>
-                        <a class="collapse-item" href="{% url 'publication'%}">Creation d'une publication</a>
+                        <a class="collapse-item" href="{% url 'publication'%}">Creer une publicite</a>
                         <a class="collapse-item" href="{% url 'listPubs'%}">listes des publications</a>
 
                     </div>
@@ -122,9 +122,11 @@
                     <span>Audiences</span>
                 </a>
                 <div id="collapseTwo11" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="bg-danger py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Mes audiences:</h6>
-                        <a class="collapse-item" href="{% url 'audience'%}">Creation des audiences</a>
+                        <a class="collapse-item" href="{% url 'create_audience'%}">Creation des audiences</a>
+                        <a class="collapse-item" href="{% url 'audience_list'%}">Listes des audiences</a>
+                        <a class="collapse-item" href="{% url 'create_location'%}">Nouvelle Localisation</a>
                     </div>
                 </div>
             </li>
@@ -139,7 +141,7 @@
                     <span>Chats</span>
                 </a>
                 <div id="collapseTwo1" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="bg-danger py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Mes Chats:</h6>
                         <a class="collapse-item" href="{% url 'chat'%}">Chatter</a>
                     </div>
@@ -156,7 +158,7 @@
                     <span>Paiement</span>
                 </a>
                 <div id="collapseTwo10" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="bg-danger py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Mes Paiement:</h6>
                         <a class="collapse-item" href="{% url 'paiement'%}">Effectuer un Paiement</a>
                     </div>
@@ -187,7 +189,7 @@
                     <span>Pages</span>
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="bg-danger py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Login Screens:</h6>
                         <a class="collapse-item" href="login.html">Login</a>
                         <a class="collapse-item" href="register.html">Register</a>
@@ -224,7 +226,6 @@
 
             <!-- Sidebar Message -->
             <div class="sidebar-card d-none d-lg-flex">
-                                    <img class=""  src="{% static 'images/logo1.png' %}" alt="alt" style="height: 50px;">
 
                 <p class="text-center mb-2">C’est dans la question que se trouvent les solutions </p>
 <!--                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>-->
@@ -451,9 +452,10 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="{% url 'campagne' %}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i
-                                class="text-white-50"></i>CREER CAMPAGNE</a>
+<!--                        <a href="{% url 'campagne' %}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i-->
+<!--                                class="text-white-50"></i>CREER CAMPAGNE</a>-->
                     </div>
+
 
 
 

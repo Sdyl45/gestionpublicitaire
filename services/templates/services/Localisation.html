@@ -1,5 +1,4 @@
 
-
 {% extends 'base.html' %}
 {% load static %}
 
@@ -9,7 +8,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>campagne</title>
+  <title>location</title>
   <style>
         body {
             background-image: url('static/images/OIP.jpg');
@@ -87,15 +86,16 @@
 <body>
 
   <div class="container">
-  <h2 style="color: red; text-align:center; font-size:24px">CREER UNE AUDIENCE</h2>
+  <h2 STYLE="color: red; text-align:center; font-size:24px">CREER UNE LOCALISATION</h2>
   <form method="POST" action="">
-    {% csrf_token %}
-    {{ audience_form.as_p }}
+   {% csrf_token %}
+    {{ form.as_p }}
     <button type="submit">CREER</button>
     <button class="btn-reset" style="background-color: red; margin-top:10px;" type="reset">Annuler</button>
-    <a style="padding: 5px 10px; background-color: blue; margin-bottom:20px;" href="{% url 'CampagneList' %}" type="button" class="btn btn-secondary btn-sm"> Retour</a>
+      <a style="padding: 5px 10px; background-color: blue; margin-bottom:20px;" href="{% url 'CampagneList' %}" type="button" class="btn btn-secondary btn-sm"> Retour</a>
+
   </form>
-</div>
+  </div>
 </body>
 </html>
 {% endblock %}

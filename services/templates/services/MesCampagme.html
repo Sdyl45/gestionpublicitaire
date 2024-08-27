@@ -1,146 +1,101 @@
+
 {% extends 'base.html' %}
 {% load static %}
 
+{% block slider %}
 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>campagne</title>
+  <style>
+        body {
+            background-image: url('static/images/OIP.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
-    {% block body %}
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
 
- <style>
-    /* Reset de base */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        h2 {
+            color: blue;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
 
-    /* Styles généraux */
-    body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: #f0f2f5;
-      color: #1c1e21;
-    }
+        form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 20px;
+        }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px;
-    }
+        .form-group {
+            margin-bottom: 0;
+        }
 
-    /* Styles de l'en-tête */
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 30px;
-    }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
 
-    .header h1 {
-      font-size: 28px;
-      font-weight: bold;
-    }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
 
-    .header button {
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+        button {
+            grid-column: 1 / -1;
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-    /* Styles du formulaire */
-    .form-group {
-      margin-bottom: 20px;
-    }
+        button:hover {
+            background-color: #45a049;
+        }
 
-    .form-group label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccd0d5;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-
-    .form-group textarea {
-      height: 150px;
-    }
-
-    .form-group button {
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-  </style>
+        .btn-reset {
+            background-color: red;
+            margin-top: 10px;
+        }
+    </style>
 </head>
+
 <body>
- <div class="container">
-   <div class="header">
-     <h1>Créer une Campagne</h1>
-   </div>
-   <form>
-     <div class="form-group">
-       <label for="campaign-name">Nom de la Campagne</label>
-       <input type="text" id="campaign-name" name="campaign-name" required>
-     </div> <div class="form-group"> <label for="audience">Audience</label>
-     <input type="text" id="audience" name="audience" required>
-   </div>
-     <div class="form-group">
-       <label for="interaction">Objectif de la Campagne</label>
-       <div class="form-check">
-         <input class="form-check-input" type="checkbox" value="interaction" id="interaction" name="campaign-objective">
-         <label class="form-check-label" for="interaction"> Interaction avec une publication </label>
-       </div> <div class="form-check">
-       <input class="form-check-input" type="checkbox" value="video-views" id="video-views" name="campaign-objective">
-       <label class="form-check-label" for="video-views"> Vues de vidéos</label>
-     </div>
-       <div class="form-check">
-         <input class="form-check-input" type="checkbox" value="reach" id="reach" name="campaign-objective">
-         <label class="form-check-label" for="reach"> Couverture </label>
-       </div> <div class="form-check">
-       <input class="form-check-input" type="checkbox" value="website-traffic" id="website-traffic" name="campaign-objective">
-       <label class="form-check-label" for="website-traffic"> Trafic sur le site web </label>
-     </div>
-       <div class="form-check">
-         <input class="form-check-input" type="checkbox" value="messages" id="messages" name="campaign-objective">
-         <label class="form-check-label" for="messages"> Messages </label>
-       </div>
-       <div class="form-check">
-         <input class="form-check-input" type="checkbox" value="page-likes" id="page-likes" name="campaign-objective">
-         <label class="form-check-label" for="page-likes"> Mentions J'aime la page </label>
-       </div>
-     </div>
-     <div class="form-group">
-       <label for="campaign-description">Description de la Campagne</label>
-       <textarea id="campaign-description" name="campaign-description" rows="5" required></textarea>
-     </div>
-     <div class="form-group">
-       <a href="{%url 'publication'%}" class="btn btn-danger" type="submit">Créer l'Annonce</a>
-     </div>
-   </form>
- </div>
 
+  <div class="container">
+  <h2 STYLE="color: red; text-align:center; font-size:24px">CREER UNE CAMPAGNE</h2>
+  <form method="POST" action="">
+   {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">CREER</button>
+    <button class="btn-reset" style="background-color: red; margin-top:10px;" type="reset">Annuler</button>
+      <a style="padding: 5px 10px; background-color: blue; margin-bottom:20px;" href="{% url 'CampagneList' %}" type="button" class="btn btn-secondary btn-sm"> Retour</a>
 
-
-
-                <!-- /.container-fluid -->
-
-
-            <!-- End of Main Content -->
-
-    {% endblock  %}
-
-
+  </form>
+  </div>
 </body>
-
 </html>
+{% endblock %}
