@@ -1,14 +1,62 @@
 from django.db import models
-
+from django import forms
 # Create your models here.
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+
+
+
+
 class Campagne(models.Model):
-    name = models.CharField(max_length=100)
+    nom = models.CharField(max_length=200, null=True)
     description = models.TextField()
-    start_date = models.DateField()
-    end_date = models.DateField()
+    public_cible = models.CharField(
+        max_length=20,
+        choices=[
+            ('adults', 'Adultes'),
+            ('teenagers', 'Adolescents'),
+            ('seniors', 'Seniors'),
+        ],
+        null=True  # Permettre des valeurs nulles
+    )
+
+    OBJECTIFS_CHOICES = [
+        ('conversions', 'Conversions'),
+        ('trafic', 'Trafic'),
+        ('engagement', 'Engagement'),
+        ('vues_video', 'Vues vidéo'),
+    ]
+
+    objectifs = models.CharField(
+        max_length=50,
+        choices=OBJECTIFS_CHOICES,
+        null=True  # Permettre des valeurs nulles
+    )
+
     budget = models.DecimalField(max_digits=10, decimal_places=2)
+    duree = models.PositiveIntegerField(default=0)  # Durée en jours
+
+    def __str__(self):
+        return self.nom
 
 
+from django.db import models
+
+class Publicite(models.Model):
+    TYPE_CONTENU_CHOICES = [
+        ('video', 'Vidéo'),
+        ('image', 'Image'),
+        ('texte', 'Texte'),
+    ]
+
+    titre = models.CharField(max_length=255)
+    description = models.TextField()
+    type_contenu = models.CharField(max_length=20, choices=TYPE_CONTENU_CHOICES)
+    fichier = models.FileField(upload_to='publicites/', null=True, blank=True)
+
+    def __str__(self):
+        return self.titre
 
 
 class Audience(models.Model):

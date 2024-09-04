@@ -1,17 +1,70 @@
+
+
 {% extends 'base.html' %}
-{% load static %}
-
-
-
 {% block body %}
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dander text-white d-flex justify-content-between align-items-center">
+                    <h5 style="color: red; text-align: center; font-size:24px" class="mb-0">LISTE DES PUB</h5>
+                    <a style="padding: 5px 10px; background-color: red; margin-bottom:20px;" href="{% url 'create_audience' %}" type="button" class="btn btn-danger btn-sm">
+                         Ajouter une publicite
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover" id="dataTable3" width="100%">
+                            <thead>
+            <tr>
+                <th>titre</th>
+                <th>Description</th>
+                <th>type_contenu</th>
+                <th>fichier</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for publicite in publicites %}
+                                <tr style="margin-left:50px;">
+                                    <td>{{publicite.id}}</td>
+                                    <td>{{ publicite.titre }}</td>
+                                    <td>{{ publicite.description | truncatechars:5 }}</td>
+                                    <td>{{ publicite.type_contenu }}</td>
+                                    <td>{{ publicite.fichier }}</td>
 
-<h1> bonjour ici mes rapports de pub</h1>
 
 
+
+
+
+
+
+                                    <td>
+
+                                        <a href="" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Modifier
+                                        </a>
+                                        <a href="" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i> Supprimer
+                                        </a>
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        $('#campagnesTable').DataTable();
+    });
+</script>
 {% endblock %}
-
-
-
-</body>
-
-</html>

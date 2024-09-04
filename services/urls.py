@@ -1,29 +1,30 @@
 from django.urls import path
 
 from . import views
-
+from .views import *
 urlpatterns = [
  path("", views.index, name="index"),
 
 
 
- path("Addutilisateurs", views.userViews, name="utilisateurs"),
- path("utilisateursList", views.listUserViews, name="Userlist"),
+ 
 
 
-path('campagnes/', views.campaign_list, name='CampagneList'),
- path('campaigns/create/', views.create_campaign, name='campagne'),
+
+path('list/campagnes', views.liste_campagnes, name='CampagneList'),
+path('creer/', CreerCampagneView.as_view(), name='creer_campagne'),
  path("AddRapport", views.RapportsCampViews, name="rapport"),
 
 
 
-path("AddPub", views.AddPublicationViews, name="publication"),
-path("listPub", views.ListPublicationViews, name="listPubs"),
+path('creer-publicite/', CreatePubliciteView.as_view(), name='publication'),
+path('list-pubs/', views.list_pubs, name='listPubs'),  # URL pour la liste des publicités
 
 
 
 
-path('audiences/create/', views.create_audience, name='create_audience'),
+
+path('audiences/create/', CreateAudienceView.as_view(), name='create_audience'),
 path('audiences/', views.audience_list, name='audience_list'),
 path("paie", views.PaiementViews, name="paiement"),
 

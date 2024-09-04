@@ -1,0 +1,119 @@
+{% load static %}
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SB Admin 2 - Login</title>
+
+    <!-- Custom fonts for this template -->
+    <link href="{% static 'utilisateurs/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'utilisateurs/css/sb-admin-2.min.css' %}" rel="stylesheet" type="text/css">
+    <style>
+        .bg-gradient-danger {
+            background: linear-gradient(180deg, rgba(255, 0, 0, 0.9) 10%, rgba(255, 0, 0, 0.7) 100%);
+        }
+
+        .card {
+            border-radius: 10px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .btn-primary {
+            background-color: #4e73df;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+        }
+
+        .text-danger {
+            color: red;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-danger">
+    <div class="container">
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+            <div class="col-xl-10 col-lg-12 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block">
+                                <div style="background-image: url('{% static 'images/logo1.png' %}'); background-size: cover; background-position: center; height: 575px;"></div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Bienvenue !</h1>
+                                    </div>
+
+                                    <!-- Bloc de message d'erreur -->
+                                    {% if messages %}
+                                        <div class="alert alert-danger">
+                                            {% for message in messages %}
+                                                {{ message }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="username" class="form-label">Nom d'utilisateur :</label>
+                                            <input type="text" id="username" name="username" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password" class="form-label">Mot de passe :</label>
+                                            <input type="password" id="password" name="password" class="form-control" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Connexion</button>
+                                    </form>
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="forgot-password.html">Mot de passe oublié ?</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="{% url 'register' %}">Créer un compte !</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'utilisateurs/js/jquery.min.js' %}"></script>
+    <script src="{% static 'utilisateurs/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'utilisateurs/js/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'utilisateurs/js/sb-admin-2.min.js' %}"></script>
+</body>
+
+</html>

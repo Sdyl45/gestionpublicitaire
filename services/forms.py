@@ -1,10 +1,18 @@
 from django import forms
-from .models import Campagne,Audience, Interest, Location
+from .models import Campagne,Audience, Interest, Location,Publicite
 
 class CampagneForm(forms.ModelForm):
     class Meta:
         model = Campagne
-        fields = ['name', 'description', 'start_date', 'end_date', 'budget']
+        fields = ['nom', 'description', 'public_cible', 'budget', 'duree','objectifs']
+        
+        
+
+
+class PubliciteForm(forms.ModelForm):
+    class Meta:
+        model = Publicite
+        fields = ['titre', 'description', 'type_contenu', 'fichier']  # Incluez tous les champs nécessaires
         
         
         

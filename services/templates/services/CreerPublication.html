@@ -1,81 +1,68 @@
+
 {% extends 'base.html' %}
 {% load static %}
 
+{% block slider %}
 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publicite</title>
 
-
-{% block body %}
-
-<title>Créer une publicité</title>
-  <style>
-    /* Style de base */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 20px;
-    }
-    form {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      grid-gap: 20px;
-    }
-    label {
-      font-weight: bold;
-    }
-    input, textarea, select {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      width: 100%;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
 </head>
+
 <body>
+
   <div class="container">
-    <h1>Créer une publicité</h1>
-    <form>
-      <label for="title">Titre :</label>
-      <input type="text" id="title" name="title" required>
+    <h2 class="text-danger" style="text-align:center; font-size:24px">CRÉER UNE PUB</h2>
 
-      <label for="description">Description :</label>
-      <textarea id="description" name="description" rows="3" required></textarea>
-
-      <label for="type">Type de contenu :</label>
-      <select id="type" name="type" required>
-        <option value="">Sélectionner un type</option>
-        <option value="video">Vidéo</option>
-        <option value="image">Image</option>
-        <option value="text">Texte</option>
-      </select>
-
-      <label for="file">Fichier :</label>
-      <input type="file" id="file" name="file" required>
-
-      <button type="submit">Créer la publicité</button>
+    <form method="POST" enctype="multipart/form-data">  <!-- N'oubliez pas d'ajouter enctype -->
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Affiche le formulaire automatiquement -->
+        <button type="submit" class="btn btn-danger">Créer la publicité</button>
+        <button type="reset" class="btn btn-secondary">Annuler la publicité</button>
     </form>
-  </div>
+</div>
 
+<style>
+    .container {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        max-width: 600px;
+        margin: 0 auto;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 
-{% endblock %}
+    .text-danger {
+        color: red;  /* Couleur de danger */
+    }
 
+    .btn {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        font-size: 16px;
+    }
 
+    .btn-danger {
+        background-color: red; /* Couleur de fond rouge */
+        color: white;          /* Couleur du texte blanc */
+    }
 
+    .btn-secondary {
+        background-color: #6c757d; /* Couleur de fond gris */
+        color: white;              /* Couleur du texte blanc */
+    }
+
+    .btn:hover {
+        opacity: 0.9; /* Effet au survol */
+    }
+</style>
 </body>
-
 </html>
+{% endblock %}
