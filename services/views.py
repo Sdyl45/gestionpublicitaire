@@ -4,6 +4,7 @@ from .forms import CampagneForm, AudienceForm,LocationForm,PubliciteForm
 from .models import Campagne, Audience,Location,Publicite
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView
+from django.forms import inlineformset_factory
 from django.urls import reverse_lazy
 # Create your views here.
 
@@ -64,11 +65,30 @@ def liste_campagnes(request):
 # 
 #  return render(request, 'services/MesCampagme.html', {'form': form})
 
-class CreerCampagneView(LoginRequiredMixin,UserPassesTestMixin, CreateView):
+# class CreerCampagneView(LoginRequiredMixin, CreateView):
+#     template_name = 'services/MesCampagme.html'
+#     model = Campagne
+#     form_class = CampagneForm
+#     success_url = reverse_lazy('CampagneList')
+
+
+class CreerCampagneView(LoginRequiredMixin, CreateView):
     template_name = 'services/MesCampagme.html'
     model = Campagne
     form_class = CampagneForm
     success_url = reverse_lazy('CampagneList')
+
+    def form_valid(self, form):
+        # Sauvegarder la campagne
+        self.object = form.save()
+
+        # Vérifier si l'utilisateur souhaite créer une publicité
+        if form.cleaned_data.get('create_ad'):
+            return redirect('publication')  # Remplacez par le nom de votre URL pour créer une publicité
+
+        return super().form_valid(form)
+    
+    
 
 def RapportsCampViews(request):
  return render(request,'services/CreerRapportsCampagne.html')
@@ -93,7 +113,7 @@ def RapportsCampViews(request):
 # class CreatePubliciteViews(LoginRequiredMixin,UserPassesTestMixin, CreateView):
 
 
-class CreatePubliciteView(LoginRequiredMixin,UserPassesTestMixin,CreateView):
+class CreatePubliciteView(LoginRequiredMixin,CreateView):
     template_name = 'services/CreerPublication.html'
     model = Publicite
     form_class = PubliciteForm
@@ -147,11 +167,43 @@ def list_pubs(request):
 #
 #  return render(request, 'services/CreerAudience.html', {'audience_form': audience_form, 'location_form': location_form})
 
+# class CreateAudienceView(CreateView):
+#     form_class = AudienceForm
+#     form_class = LocationForm
+#     template_name = 'services/CreerAudience.html'
+#     success_url = reverse_lazy('audience_list')
+
+
+
 class CreateAudienceView(CreateView):
+    model = Audience
     form_class = AudienceForm
-    form_class = LocationForm
     template_name = 'services/CreerAudience.html'
     success_url = reverse_lazy('audience_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = self.get_formset(self.request.POST)
+        else:
+            context['formset'] = self.get_formset()
+        return context
+
+    def get_formset(self, data=None):
+        AudienceFormSet = inlineformset_factory(Audience, Location, fields=('name', 'description', 'age_min', 'age_max', 'gender', 'interests', 'location'), extra=1)
+        return AudienceFormSet(data, instance=self.object)
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid():
+            self.object = form.save()  # Sauvegarde l'auteur
+            formset.instance = self.object  # Lier le formset à l'auteur
+            formset.save()  # Sauvegarde des livres
+            return redirect('success_page')  # Redirection vers une page de succès
+        else:
+            return self.form_invalid(form)
+
 
 def audience_list(request):
  audiences = Audience.objects.all()

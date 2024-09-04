@@ -16,9 +16,10 @@ def login(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            auth_login(request, user)  # Renommez pour éviter les conflits
-            messages.success(request, 'Connexion réussie !')  # Message de succès
+            auth_login(request, user)  # Connexion de l'utilisateur
             return redirect('index')  # Redirigez vers la page d'accueil ou une autre page
+            messages.success(request, 'Connexion réussie !')  # Message de succès
+
         else:
             messages.error(request, 'Nom d\'utilisateur ou mot de passe incorrect.')
 
@@ -47,6 +48,7 @@ def forgot_password(request):
 def LogoutViews(request):
     if request.method == 'POST':
         logout(request)
-    return render(request, 'utilisateurs/login.html')
+        messages.success(request, 'Déconnexion réussie !')
+    return redirect('login')
 
 

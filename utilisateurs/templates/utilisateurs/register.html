@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Inscription</title>
@@ -12,16 +12,26 @@
             height: 100vh;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            color: #333;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
             padding: 40px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: bold;
         }
 
         h2 {
@@ -33,12 +43,8 @@
 
         form {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
             grid-gap: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 0;
         }
 
         label {
@@ -49,27 +55,38 @@
 
         input, textarea, select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 6px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #4CAF50; /* Couleur pour le focus */
+            outline: none;
         }
 
         .buttons {
             display: flex;
             justify-content: space-between;
+            margin-top: 20px;
         }
 
-        button[type="submit"],
-        button[type="reset"] {
-            background-color: #4CAF50;
-            color: white;
+        button {
             padding: 12px 20px;
             border: none;
-            border-radius: 3px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
             flex-grow: 1;
             margin: 0 5px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
         }
 
         button[type="submit"]:hover {
@@ -78,32 +95,40 @@
 
         button[type="reset"] {
             background-color: red;
+            color: white;
         }
 
         button[type="reset"]:hover {
             background-color: #c00000;
         }
+
+        .link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="form">
-            <form method="post" action="">
-
-                {% csrf_token %}
-                <h1>Inscription</h1>
-                {{ form.as_p }}
-                <div class="buttons">
-                    <button type="submit">S'inscrire</button> <br>
-
-                    <button style="background:red;" type="reset">Réinitialiser</button>
-                </div>
-
-            <p class="link">Déjà inscrit ? <a href="{% url 'login' %}">Se connecter</a></p>
-                </form>
-        </div>
+        <h1>Inscription</h1>
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="buttons">
+                <button type="submit">S'inscrire</button>
+                <button type="reset">Réinitialiser</button>
+            </div>
+        </form>
+        <p class="link">Déjà inscrit ? <a href="{% url 'login' %}">Se connecter</a></p>
     </div>
 </body>
 </html>
-
-

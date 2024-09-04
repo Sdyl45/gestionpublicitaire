@@ -416,9 +416,9 @@
                                     <span style="color:dark;">{{ request.user.username }} !</span>
 
                                 {% else %}
-                                <a href="{% url 'signin' %}" class="btn btn-outline-secondary">Connexion</a>
+                                    <a style="margin-bottom:70px" href="{% url 'login' %}" class="btn btn-outline-secondary">Connexion</a>
 
-                                    <img src="{% static 'images/logo1.png' %}" alt="alt" style="height: 50px;">
+                                    <img src="{% static 'images/logo1.png' %}" alt="alt" style="height: 50px; margin-bottom:70px;">
 
                                 {% endif %}
                             </a>
@@ -532,7 +532,7 @@
                 {% if user.is_authenticated %}
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
-                        <button  type="submit" class="btn btn-secondary" data-dismiss="modal">Déconnexion</button>
+                        <button  type="submit" class="btn btn-secondary">Déconnexion</button>
                     </form>
                 {% else %}
                     <a href="{% url 'login' %}" class="btn btn-primary">Se connecter</a>

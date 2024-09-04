@@ -1,12 +1,14 @@
 from django import forms
 from .models import Campagne,Audience, Interest, Location,Publicite
 
+
+
 class CampagneForm(forms.ModelForm):
+    create_ad = forms.BooleanField(required=False, label='Créer une publicité après avoir créé la campagne')
+
     class Meta:
         model = Campagne
         fields = ['nom', 'description', 'public_cible', 'budget', 'duree','objectifs']
-        
-        
 
 
 class PubliciteForm(forms.ModelForm):
