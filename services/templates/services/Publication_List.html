@@ -6,15 +6,15 @@
         <div class="col-12 col-lg-12">
             <div class="card shadow-sm">
                 <div class="card-header bg-dander text-white d-flex justify-content-between align-items-center">
-                    <h5 style="color: red; text-align:center; font-size:24px" class="mb-0">LISTE DES PUBlicites</h5>
+                    <h5 style="color: red; text-align:center; font-size:24px" class="mb-0">LISTE DES PUBLICATIONS</h5>
                     <div class="container-fluid">
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-left:650px;">
 
                         {% if user.role == 'admin' or user.role == 'directeur_marketing' %}
-                        <a href="{% url 'publication' %}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i
-                                class="text-white-50"></i>Creer une publicite</a>
+                        <a href="{% url 'publications' %}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i
+                                class="text-white-50"></i>Creer une publication</a>
                     </div>
                     {% endif %}
 
@@ -30,29 +30,23 @@
                 <th>STATUTS</th>
                 <th>BUDGET QUOTIDIEN</th>
                 <th>CIBLE</th>
-                <th>OBJECTIFS</th>
-                <th>EVENEMENT</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-           {% for publicite in publicites %}
+           {% for publication in publications %}
                     <td><a href="{% url 'publicitedetail' publicite.pk %}">{{publicite.id}}</a></td>
-                    <td>{{ publicite.nom }}</td>
-                    <td>{{ publicite.statut | truncatechars:5 }}</td>
-                    <td>{{ publicite.budget_quotidien }}</td>
-                    <td>{{ publicite.ciblage }}</td>
-                    <td>{{ publicite.objectif_optimisation }}</td>
-                    <td>{{ publicite.evenement_facturation }}</td>
-
-
+                    <td>{{ publication.nom }}</td>
+                    <td>{{ publication.statut | truncatechars:5 }}</td>
+                    <td>{{ publication.budget_quotidien }}</td>
+                    <td>{{ publication.ciblage }}</td>
 
                                     <td>
 
-                                        <a href="{% url 'modifPub' publicite.pk %}" class="btn btn-warning btn-sm">
+                                        <a href="{% url 'modifPub' publication.pk %}" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i> Modifier
                                         </a>
-                                        <a href="{% url 'pubdelete' publicite.pk %}" class="btn btn-danger btn-sm">
+                                        <a href="{% url 'pubdelete' publication.pk %}" class="btn btn-danger btn-sm">
                                             <i class="fas fa-trash"></i> Supprimer
                                         </a>
 
@@ -67,7 +61,6 @@
         </div>
     </div>
 </div>
-
 
 <script>
     $(document).ready(function() {

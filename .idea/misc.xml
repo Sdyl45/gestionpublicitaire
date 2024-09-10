@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-<<<<<<< HEAD
+  <component name="Black">
+    <option name="sdkName" value="Python 3.12 (GestionPublicitaire)" />
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (GestionPublicitaire)" project-jdk-type="Python SDK" />
-=======
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
   <component name="PyCharmProfessionalAdvertiser">
     <option name="shown" value="true" />
   </component>
->>>>>>> 3fff8f513d362201e9f1cd2541ded1a8f14b008c
 </project>

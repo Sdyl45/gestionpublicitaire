@@ -1,112 +1,66 @@
+
+
 {% extends 'base.html' %}
-{% load static %}
-
-
-{%  block body %}
-
-
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
+{% block body %}
+<div class="container-fluid ">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dander text-white d-flex justify-content-between align-items-center">
+                    <h5 style="color: red; text-align: center; font-size:24px" class="mb-0">LISTE DES UTILISATEURS</h5>
+                    <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Listes des utilisateurs</h1>
-                    <p class="mb-4">ICi la listes des different utilisateurs.</p>
-
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>$320,800</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Garrett Winters</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>63</td>
-                                            <td>2011/07/25</td>
-                                            <td>$170,750</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ashton Cox</td>
-                                            <td>Junior Technical Author</td>
-                                            <td>San Francisco</td>
-                                            <td>66</td>
-                                            <td>2009/01/12</td>
-                                            <td>$86,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Cedric Kelly</td>
-                                            <td>Senior Javascript Developer</td>
-                                            <td>Edinburgh</td>
-                                            <td>22</td>
-                                            <td>2012/03/29</td>
-                                            <td>$433,060</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Airi Satou</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>33</td>
-                                            <td>2008/11/28</td>
-                                            <td>$162,700</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Brielle Williamson</td>
-                                            <td>Integration Specialist</td>
-                                            <td>New York</td>
-                                            <td>61</td>
-                                            <td>2012/12/02</td>
-                                            <td>$372,000</td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        {% if user.role == 'admin' or user.role == 'directeur_marketing' %}
+                        <a href="{% url 'register' %}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" style="margin-left:600px"><i
+                                class="text-white-50"></i>Ajouter un utilisateur</a>
                     </div>
+                    {% endif %}
 
                 </div>
-                <!-- /.container-fluid -->
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover" id="dataTable3" width="100%">
+                            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for utilisateur in utilisateurs %}
+                                <tr style="margin-left:50px;">
+                                    <td>{{utilisateur.id}}</td>
+                                    <td>{{ utilisateur.username }}</td>
+                                    <td>{{ utilisateur.role }}</td>
+
+                                    <td>
+                                        <a href="{% url 'modifuser' utilisateur.pk %}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> edit
+                                        </a>
+                                        <a href="{% url 'userdelete' utilisateur.pk %}" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i> delete
+                                        </a>
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-            <!-- End of Main Content -->
-
-{%  endblock %}
-
-
-</body>
-
-</html>
+<script>
+    $(document).ready(function() {
+        $('#campagnesTable').DataTable();
+    });
+</script>
+{% endblock %}

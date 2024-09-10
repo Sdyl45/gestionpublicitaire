@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DetailCampagne</title>
+</head>
+<body>
+<p>{{ campagne.nom }}</p>: nom de la campagne
+<p>{{ campagne.description}}</p>: sa description
+<p>{{campagne.public_cible }}</p>: public cible
+<p>{{ campagne.budget }}</p>: son budget
+<p>{{ campagne.duree }}</p>: sa duree en jours
+<a href="{%url 'CampagneList'%}" class="btn btn-red">Retour</a>
+</body>
+</html>
+

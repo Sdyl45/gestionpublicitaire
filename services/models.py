@@ -5,58 +5,52 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
+from django.db import models
 
-
-
-class Campagne(models.Model):
-    nom = models.CharField(max_length=200, null=True)
-    description = models.TextField()
-    public_cible = models.CharField(
-        max_length=20,
-        choices=[
-            ('adults', 'Adultes'),
-            ('teenagers', 'Adolescents'),
-            ('seniors', 'Seniors'),
-        ],
-        null=True  # Permettre des valeurs nulles
-    )
-
-    OBJECTIFS_CHOICES = [
-        ('conversions', 'Conversions'),
-        ('trafic', 'Trafic'),
-        ('engagement', 'Engagement'),
-        ('vues_video', 'Vues vidéo'),
+class Campaign(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Activer'),
+        ('paused', 'Suspendu'),
+        ('completed', 'desactiver'),
     ]
 
-    objectifs = models.CharField(
-        max_length=50,
-        choices=OBJECTIFS_CHOICES,
-        null=True  # Permettre des valeurs nulles
-    )
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='desactiver')
 
-    budget = models.DecimalField(max_digits=10, decimal_places=2)
-    duree = models.PositiveIntegerField(default=0)  # Durée en jours
+    def __str__(self):
+        return self.name
+
+
+
+
+class Publicite(models.Model):
+    STATUT_CHOIX = [
+        ('actif', 'Actif'),
+        ('mis_en_pause', 'Mis en pause'),
+        ('termine', 'Terminé'),
+    ]
+
+    OBJECTIFS_OPTIMISATION = [
+        ('clics_lien', 'Clics sur le lien'),
+        ('impressions', 'Impressions'),
+        ('engagement', 'Engagement'),
+    ]
+
+    EVENEMENTS_FACTURATION = [
+        ('impressions', 'Impressions'),
+        ('clics', 'Clics'),
+    ]
+
+    nom = models.CharField(max_length=200,default='')
+    statut = models.CharField(max_length=12, choices=STATUT_CHOIX, default='actif')
+    budget_quotidien = models.DecimalField(max_digits=10, decimal_places=2,default='' )
+    ciblage = models.TextField(help_text="Détails concernant les critères de ciblage.",default='')
+    objectif_optimisation = models.CharField(max_length=20, choices=OBJECTIFS_OPTIMISATION,default='')
+    evenement_facturation = models.CharField(max_length=20, choices=EVENEMENTS_FACTURATION,default='')
 
     def __str__(self):
         return self.nom
-
-
-from django.db import models
-
-class Publicite(models.Model):
-    TYPE_CONTENU_CHOICES = [
-        ('video', 'Vidéo'),
-        ('image', 'Image'),
-        ('texte', 'Texte'),
-    ]
-
-    titre = models.CharField(max_length=255)
-    description = models.TextField()
-    type_contenu = models.CharField(max_length=20, choices=TYPE_CONTENU_CHOICES)
-    fichier = models.FileField(upload_to='publicites/', null=True, blank=True)
-
-    def __str__(self):
-        return self.titre
 
 
 class Audience(models.Model):

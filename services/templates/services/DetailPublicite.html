@@ -1,0 +1,17 @@
+{% extends 'base.html'%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DetailPublicite</title>
+</head>
+{% block body %}
+<body>
+ nom de la publicite:<p>{{ publicite.titre }}</p>
+sa description:<p>{{ publicite.description}}</p>
+son contenu:<p>{{publicite.type_contenu }}</p>
+type d'image:<p>{{ publicite.fichier }}</p>
+<a href="{%url 'listPubs'%}" class="btn btn">Retour</a>
+{% endblock %}
+
+</body>
+</html>

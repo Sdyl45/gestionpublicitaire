@@ -1,21 +1,52 @@
 from django import forms
-from .models import Campagne,Audience, Interest, Location,Publicite
+from .models import Campaign,Audience, Interest, Location,Publicite
 
 
 
-class CampagneForm(forms.ModelForm):
-    create_ad = forms.BooleanField(required=False, label='Créer une publicité après avoir créé la campagne')
-
+class CampaignForm(forms.ModelForm):
     class Meta:
-        model = Campagne
-        fields = ['nom', 'description', 'public_cible', 'budget', 'duree','objectifs']
+        model = Campaign
+        fields = ['name', 'description', 'status']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
+            'status': forms.Select(),
+        }
+
+
+
+class EditCampagneForm(forms.ModelForm):
+    class Meta:
+        model = Campaign
+        fields = ['name', 'description', 'status']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
+            'status': forms.Select(),
+        }
 
 
 class PubliciteForm(forms.ModelForm):
     class Meta:
         model = Publicite
-        fields = ['titre', 'description', 'type_contenu', 'fichier']  # Incluez tous les champs nécessaires
-        
+        fields = ['nom', 'statut', 'budget_quotidien', 'ciblage', 'objectif_optimisation', 'evenement_facturation']
+        widgets = {
+            'ciblage': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
+            'statut': forms.Select(),
+            'objectif_optimisation': forms.Select(),
+            'evenement_facturation': forms.Select(),
+        }
+
+
+class EditPudForm(forms.ModelForm):
+    class Meta:
+        model = Publicite
+        fields = ['nom', 'statut', 'budget_quotidien', 'ciblage', 'objectif_optimisation', 'evenement_facturation']
+        widgets = {
+            'ciblage': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
+            'statut': forms.Select(),
+            'objectif_optimisation': forms.Select(),
+            'evenement_facturation': forms.Select(),
+        }
+
         
         
 

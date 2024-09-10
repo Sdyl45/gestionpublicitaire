@@ -1,11 +1,12 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from .forms import CampagneForm, AudienceForm,LocationForm,PubliciteForm
-from .models import Campagne, Audience,Location,Publicite
+from .forms import CampaignForm, AudienceForm,LocationForm,PubliciteForm,EditPudForm,EditCampagneForm
+from .models import Campaign, Audience,Location,Publicite
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView
 from django.forms import inlineformset_factory
 from django.urls import reverse_lazy
+
 # Create your views here.
 
 
@@ -49,10 +50,24 @@ def error_404(request,exception):
 
 
 # creation de campagnes views debut
-def liste_campagnes(request):
- campagnes = Campagne.objects.all()
- return render(request, 'services/ListCampagne.html', {'campagnes': campagnes})
+# def liste_campagnes(request):
+#  campagnes = Campagne.objects.all()
+#  return render(request, 'services/ListCampagne.html', {'campagnes': campagnes})
 
+
+class liste_campagnesView(ListView):
+    template_name = 'services/ListCampagne.html'
+    model = Campaign
+    context_object_name = 'campagnes'
+    login_url = reverse_lazy('CampagneList')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['message'] = 'papa mange'
+        return context
+
+    def test_func(self):
+        return self.request.user.is_superuser
 
 # def creer_campagne(LoginRequiredMixin,UserPassesTestMixin,ListView):
 #  if request.method == 'POST':
@@ -74,8 +89,8 @@ def liste_campagnes(request):
 
 class CreerCampagneView(LoginRequiredMixin, CreateView):
     template_name = 'services/MesCampagme.html'
-    model = Campagne
-    form_class = CampagneForm
+    model = Campaign
+    form_class = CampaignForm
     success_url = reverse_lazy('CampagneList')
 
     def form_valid(self, form):
@@ -88,11 +103,30 @@ class CreerCampagneView(LoginRequiredMixin, CreateView):
 
         return super().form_valid(form)
     
-    
+class modifierCampagneView(UpdateView):
+    template_name = 'services/MesCampagme.html'
+    model = CampaignForm
+    form_class = EditCampagneForm
+    success_url = reverse_lazy('CampagneList')
 
+
+
+
+
+class deletecampagneView(DeleteView):
+    template_name = 'services/dropPub.html'
+    model = Campaign
+    context_object_name = 'campagne'
+    success_url = reverse_lazy('CampagneList')
 def RapportsCampViews(request):
  return render(request,'services/CreerRapportsCampagne.html')
 
+
+
+class detailcampagneView(DetailView):
+    template_name = 'services/DetailCampagne.html'
+    model = CampaignForm
+    context_object_name = 'campagne'
 # creation de campagnes views fin
 
 # creation de publicite views debut
@@ -119,9 +153,31 @@ class CreatePubliciteView(LoginRequiredMixin,CreateView):
     form_class = PubliciteForm
     success_url = reverse_lazy('listPubs')
 
+class modifierPubliciteView(UpdateView):
+    template_name = 'services/CreerPublication.html'
+    model = Publicite
+    form_class = EditPudForm
+    success_url = reverse_lazy('listPubs')
+
+
+class deletepubliciteView(DeleteView):
+    template_name = 'services/dropPub.html'
+    model = Publicite
+    context_object_name = 'publicite'
+    success_url = reverse_lazy('listPubs')
+
+
+class detailPubliciteView(DetailView):
+    template_name = 'services/DetailPublicite.html'
+    model = Publicite
+    context_object_name = 'publicite'
 def list_pubs(request):
     publicites = Publicite.objects.all()  # Récupère toutes les publicités
     return render(request, 'services/ListPubs.html', {'publicites': publicites})
+
+
+def CreatePublicationView(request):
+ return render(request,'services/createPublication.html')
 # creation de publicite views fin
 
 

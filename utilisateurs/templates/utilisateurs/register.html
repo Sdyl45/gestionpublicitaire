@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load static%}
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -119,7 +119,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>Inscription</h1>
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="{%  url 'index'%}">
+                <div class="sidebar-brand-icon rotate-n-10">
+
+                    <img class=""  src="{% static 'images/logo1.png' %}" alt="alt" style="height: 250px; margin-left:150px;">
+                </div>
+            </a>        <h1>Register</h1>
         <form method="post" action="">
             {% csrf_token %}
             {{ form.as_p }}

@@ -11,3 +11,8 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 
+class EditUserForm(UserCreationForm):
+
+    class Meta:
+        model = Utilisateur
+        fields = ['username', 'role']
