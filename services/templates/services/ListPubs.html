@@ -38,7 +38,7 @@
         <tbody>
            {% for publicite in publicites %}
                     <td><a href="{% url 'publicitedetail' publicite.pk %}">{{publicite.id}}</a></td>
-                    <td>{{ publicite.nom }}</td>
+                    <td>{{ publicite.name }}</td>
                     <td>{{ publicite.statut | truncatechars:5 }}</td>
                     <td>{{ publicite.budget_quotidien }}</td>
                     <td>{{ publicite.ciblage }}</td>

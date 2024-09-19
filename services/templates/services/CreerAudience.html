@@ -91,9 +91,9 @@
   <form method="POST" action="">
     {% csrf_token %}
     {{ audience_form.as_p }}
-    <button type="submit">CREER</button>
-    <button class="btn-reset" style="background-color: red; margin-top:10px;" type="reset">Annuler</button>
-    <a style="padding: 5px 10px; background-color: blue; margin-bottom:20px;" href="{% url 'CampagneList' %}" type="button" class="btn btn-secondary btn-sm"> Retour</a>
+    <button class="btn btn-dark" type="submit">CRÉER</button>
+        <button class="btn btn-danger" type="reset" class="btn-reset">Annuler</button>
+        <a href="{% url 'audience_list' %}" class="btn btn-dark">Retour</a>
   </form>
 </div>
 </body>

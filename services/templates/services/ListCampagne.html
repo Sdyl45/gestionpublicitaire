@@ -1,5 +1,4 @@
 
-
 {% extends 'base.html' %}
 {% block body %}
 <div class="container-fluid">
@@ -37,7 +36,7 @@
            {% for campagne in campagnes %}
                                 <tr style="margin-left:50px;">
                                     <td><a href="{% url 'campagnedetail' campagne.pk %}">{{campagne.id}}</a></td>
-                                    <td>{{ campagne.nom }}</td>
+                                    <td>{{ campagne.name }}</td>
                                     <td>{{ campagne.description | truncatechars:5 }}</td>
                                     <td>{{ campagne.status }}</td>
 
@@ -46,9 +45,21 @@
                                         <a href="{% url 'modifCampagne' campagne.pk %}" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i> edit
                                         </a>
-                                        <a href="{% url 'Campdelete' campagne.pk %}" class="btn btn-danger btn-sm">
-                                            <i class="fas fa-trash"></i> delete
-                                        </a>
+                                        <!-- Lien de suppression avec confirmation -->
+<a href="{% url 'Campdelete' campagne.pk %}" class="btn btn-danger btn-sm" onclick="return confirmDelete();">
+    <i class="fas fa-trash"></i> delete
+</a>
+
+<!-- Toast de confirmation -->
+<div id="toast" class="toast" style="position: fixed; right: 20px; top: 20px; display: none;">
+    <div class="toast-header">
+        <strong class="mr-auto">Confirmation</strong>
+        <button type="button" class="ml-2 mb-1 close" onclick="hideToast();">&times;</button>
+    </div>
+    <div class="toast-body">
+        La campagne a été supprimée avec succès !
+    </div>
+</div>
 
                                     </td>
                                 </tr>
@@ -68,4 +79,26 @@
         $('#campagnesTable').DataTable();
     });
 </script>
+
+
+<script>
+    function confirmDelete() {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cette campagne ?")) {
+            // Afficher le toast après la suppression
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => {
+                hideToast();
+            }, 3000); // Masquer le toast après 3 secondes
+            return true; // Permettre la suppression
+        }
+        return false; // Annuler la suppression
+    }
+
+    function hideToast() {
+        const toast = document.getElementById('toast');
+        toast.style.display = 'none';
+    }
+</script>
+
 {% endblock %}

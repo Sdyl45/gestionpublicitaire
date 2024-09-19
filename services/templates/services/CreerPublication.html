@@ -11,20 +11,6 @@
   <title>Publicite</title>
 
 </head>
-
-<body>
-
-  <div class="container">
-    <h2 class="text-danger" style="text-align:center; font-size:24px">CRÉER UNE PUB</h2>
-
-    <form method="POST" enctype="multipart/form-data">  <!-- N'oubliez pas d'ajouter enctype -->
-        {% csrf_token %}
-        {{ form.as_p }}  <!-- Affiche le formulaire automatiquement -->
-        <button type="submit" class="btn btn-danger">Créer la publicité</button>
-        <button type="reset" class="btn btn-secondary">Annuler la publicité</button>
-    </form>
-</div>
-
 <style>
     .container {
         padding: 20px;
@@ -39,30 +25,66 @@
     .text-danger {
         color: red;  /* Couleur de danger */
     }
+button {
+            grid-column: 1 / -1;
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
 
-    .btn {
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 10px;
-        font-size: 16px;
-    }
+        button:hover {
+            background-color: #45a049;
+        }
 
-    .btn-danger {
-        background-color: red; /* Couleur de fond rouge */
-        color: white;          /* Couleur du texte blanc */
-    }
+        .btn-reset {
+            background-color: red;
+            margin-top: 10px;
+        }
 
-    .btn-secondary {
-        background-color: #6c757d; /* Couleur de fond gris */
-        color: white;              /* Couleur du texte blanc */
-    }
+        .btn-reset:hover {
+            background-color: darkred;
+        }
 
-    .btn:hover {
-        opacity: 0.9; /* Effet au survol */
-    }
+        .btn-secondary {
+            display: inline-block;
+            margin-top: 10px;
+            text-align: center;
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0056b3;
+        }
 </style>
+<body>
+
+  <div class="container">
+    <h2>Publier sur Facebook</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Publier</button>
+</form>
+        <button class="btn btn-dark" type="submit">CRÉER</button>
+        <button class="btn btn-danger" type="reset" class="btn-reset">Annuler</button>
+        <a href="{% url 'listPubs' %}" class="btn btn-dark">Retour</a>
+    </form>
+</div>
+
+
 </body>
 </html>
 {% endblock %}

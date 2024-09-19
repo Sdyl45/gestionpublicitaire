@@ -123,8 +123,9 @@
     <form method="POST" action="{% url 'creer_campagne' %}">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">CRÉER</button>
-        <button type="reset" class="btn-reset">Annuler</button>
+        <button type="submit">CRÉER</button> <br>
+        <button type="reset" class="btn-reset">Annuler</button> <br>
+        <a href="{% url 'CampagneList' %}" class="btn btn-dark">Retour</a>
     </form>
   </div>
 </body>

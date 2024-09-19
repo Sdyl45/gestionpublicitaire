@@ -42,7 +42,7 @@ class Publicite(models.Model):
         ('clics', 'Clics'),
     ]
 
-    nom = models.CharField(max_length=200,default='')
+    name = models.CharField(max_length=200,default='')
     statut = models.CharField(max_length=12, choices=STATUT_CHOIX, default='actif')
     budget_quotidien = models.DecimalField(max_digits=10, decimal_places=2,default='' )
     ciblage = models.TextField(help_text="Détails concernant les critères de ciblage.",default='')
@@ -50,7 +50,7 @@ class Publicite(models.Model):
     evenement_facturation = models.CharField(max_length=20, choices=EVENEMENTS_FACTURATION,default='')
 
     def __str__(self):
-        return self.nom
+        return self.name
 
 
 class Audience(models.Model):
@@ -92,3 +92,25 @@ class Location(models.Model):
 
     def __str__(self):
         return f"{self.name}, {self.country}"
+
+
+
+
+
+class FacebookPost(models.Model):
+    POST_TYPE_CHOICES = (
+        ('message', 'Message'),
+        ('image', 'Image'),
+        ('video', 'Vidéo'),
+    )
+
+    post_type = models.CharField(max_length=10, choices=POST_TYPE_CHOICES)
+    message = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='images/', blank=True, null=True)
+    video = models.FileField(upload_to='videos/', blank=True, null=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.post_type} - {self.id}'
+

@@ -22,7 +22,7 @@ path('camp/<pk>/modifier', modifierCampagneView.as_view(), name='modifCampagne')
 
 
 path('creer-publicite/', CreatePubliciteView.as_view(), name='publication'),
-path('creer-publication/', views.CreatePublicationView, name='publications'),
+
 path('list-pubs/', views.list_pubs, name='listPubs'),  # URL pour la liste des publicités
 path('pub/<pk>/modifier',  modifierPubliciteView.as_view(), name='modifPub'),
  path('Pubdetail/<pk>/effacer', deletepubliciteView.as_view(), name='pubdelete'),
@@ -33,7 +33,7 @@ path('audiences/', views.audience_list, name='audience_list'),
 path("paie", views.PaiementViews, name="paiement"),
 
 
-
+path('publish/', views.publish_content_view, name='publish_content'),
 
 
 path('locations/create/', views.create_location, name='create_location'),

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Résultat de la publication</title>
+</head>
+<body>
+    <h1>Résultat de la publication sur Facebook</h1>
+
+    {% if response %}
+        <p>Statut de la réponse : {{ response.status }}</p>
+        <p>Détails : {{ response.message }}</p>
+    {% else %}
+        <p>Aucune réponse disponible.</p>
+    {% endif %}
+
+    <a href="{% url 'publish_content' %}">Retour à la publication</a>
+</body>
+</html>

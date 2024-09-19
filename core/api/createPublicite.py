@@ -2,8 +2,10 @@ from facebook_business.adobjects.adaccount import AdAccount
 from facebook_business.api import FacebookAdsApi
 
 # Remplacez par vos informations
-access_token = 'EAAHZAsb1umoIBO7jO2sCO0a7bSYtZCMphKy8YgSpEoKItxivvAYhOKVB2YsIZBdo0rj6U13fuUppvSqWGSVLPwITWLo24gqeLS3yLhc7DAYdaw7WiGx8a79JZCroixu4rlvBzZCMrD7vROokSfIeZBW1WdLzOZADk1sqhHMZBxR369h4TJyskqZAybIYR7zs2FUALHZBc8u1cZB'
+access_token = 'EAAHZAsb1umoIBO2m9xqoubTNrPX6q1jApd1i5vJj8OoneQdJOajJpEQzxCLtcROQf8fjzkYqdkcQbyrY9Bm5r20vKaOGTdsHIuNNFp8XZBVnV7ZC8qpFS8uyFUi0EMZCWOIFiGZChdKpmwHI5WXL8tsj16o6KQG91fsYmSHBJkqjEq8nlIdbZCVNwS732YLL4FDUkWpzn8'
 account_id = 'act_1822221194968260'  # ID de compte publicitaire valide
+campaign_id = '120212440934690015'  # ID de campagne valide
+app_id = '520832387291778'  # Remplacez par votre application_id
 
 # Initialiser l'API
 FacebookAdsApi.init(access_token=access_token)
@@ -15,7 +17,7 @@ params = {
     'billing_event': 'IMPRESSIONS',
     'bid_amount': '250',
     'daily_budget': '5000',
-    'campaign_id': '120212245216230015',
+    'campaign_id': 120212440934690015,
     'targeting': {
         'facebook_positions': ['feed'],
         'geo_locations': {
@@ -24,8 +26,8 @@ params = {
     },
     'status': 'PAUSED',
     'promoted_object': {
-        'application_id': '520832387291778',  # Remplacez par votre application_id
-        'custom_event_type': 'PURCHASE'  # Utilisez 'custom_event_type'
+        'application_id': 520832387291778,
+        'custom_event_type': 'PURCHASE'
     },
 }
 
@@ -35,7 +37,7 @@ try:
 
     # Créer l'ensemble de publicités
     ad_set = ad_account.create_ad_set(params=params)
-    print(f"Ad Set created successfully: {ad_set}")
+    print(f"Ensemble de publicités créé avec succès : {ad_set}")
 
 except Exception as e:
     print(f"Une erreur s'est produite : {e}")
