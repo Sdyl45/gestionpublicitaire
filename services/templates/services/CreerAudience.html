@@ -1,5 +1,3 @@
-
-
 {% extends 'base.html' %}
 {% load static %}
 
@@ -7,34 +5,34 @@
 
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>campagne</title>
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audience</title>
+    <style>
         body {
-            background-image: url('static/images/OIP.jpg');
+            background-image: url('{% static "images/OIP.jpg" %}');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
             height: 100vh;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 40px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 8px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
-            color: blue;
+            color: red;
             text-align: center;
-            font-size: 24px;
+            font-size: 28px;
             margin-bottom: 30px;
         }
 
@@ -52,13 +50,22 @@
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
+            color: #333;
         }
 
-        input, textarea, select {
+        input,
+        textarea,
+        select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 16px;
+        }
+
+        textarea {
+            height: 100px; /* Hauteur réduite pour le textarea */
+            resize: none; /* Désactiver le redimensionnement */
         }
 
         button {
@@ -71,31 +78,51 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
 
         button:hover {
             background-color: #45a049;
         }
 
-        .btn-reset {
+        .btn-danger {
             background-color: red;
             margin-top: 10px;
+        }
+
+        .btn-danger:hover {
+            background-color: darkred;
+        }
+
+        .btn-dark {
+            background-color: #343a40;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .btn-dark:hover {
+            background-color: #23272b;
         }
     </style>
 </head>
 
 <body>
-
-  <div class="container">
-  <h2 style="color: red; text-align:center; font-size:24px">CREER UNE AUDIENCE</h2>
-  <form method="POST" action="">
-    {% csrf_token %}
-    {{ audience_form.as_p }}
-    <button class="btn btn-dark" type="submit">CRÉER</button>
-        <button class="btn btn-danger" type="reset" class="btn-reset">Annuler</button>
-        <a href="{% url 'audience_list' %}" class="btn btn-dark">Retour</a>
-  </form>
-</div>
+    <div class="container">
+        <h2>CREER UNE AUDIENCE</h2>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-success" type="submit">CRÉER</button>
+            <button class="btn btn-danger" type="reset" class="btn-reset">Annuler</button>
+            <a href="{% url 'audience_list' %}" class="btn btn-dark">Retour</a>
+        </form>
+    </div>
 </body>
 </html>
 {% endblock %}

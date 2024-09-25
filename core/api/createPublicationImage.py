@@ -2,8 +2,8 @@ import requests
 
 # Configuration
 page_id = '434662436390612'  # Remplacez par votre Page ID
-access_token = 'EAAHZAsb1umoIBO4aSGxHV1ZCBtZCIop28F8oEt4B94f12Kai4HuPC97JdaeszSuxpsPoWG0ZBZAEI1m0t3kpsvygbUQk612xCGWZAGOrA345dZCWVPg7VCuMngGVZASiAbSOn6otoVaaX1IapMaAKB0ULr36Ady1YmPdM3TCrZCBS0KdU6sVKvP0DribA4EJP5qxwfCe4ZCVCfQTi59xOEpnzRapvmLfwAhl44'  # Assurez-vous qu'il s'agit d'un token de page
-message = 'Voici une photo !'  # Message que vous souhaitez publier avec la photo
+access_token = 'EAAHZAsb1umoIBOZBmX8tynD4871oFDnhfMS43JXh8eWoO9ff5xYHxtzme1udX55YJf5Vn3iM6AOcn5FZCfTfQlQIbiJlRtKHZANA1RZBu4aLOPIRa3Gc3zzyn1OSLF9odH0d2QRLGemdZCbZCl3X1Jl65omQkK6t7AriD5yZC7kKyfkLFTSWIy00q47R2ZBz0wPtFKNOhakZCpQLCw2z8Gb2gY3ZAx2L7is86kA'  # Assurez-vous qu'il s'agit d'un token de page
+message = 'Ma publication!'  # Message que vous souhaitez publier avec la photo
 photo_path = 'C:/Users/LYAN/PycharmProjects/montest/static/images/mage2.jpg'  # Chemin vers votre image locale
 
 # Publier une photo avec un message sur la page

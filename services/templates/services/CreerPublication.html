@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% load static %}
 
@@ -8,82 +7,132 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Publicite</title>
+  <title>Publication</title>
 
-</head>
-<style>
+  <style>
+    /* Style global du conteneur */
     .container {
-        padding: 20px;
+        padding: 40px;
         border: 1px solid #ddd;
-        border-radius: 5px;
-        background-color: #f9f9f9;
+        border-radius: 8px;
+        background-color: #f4f4f4;
         max-width: 600px;
-        margin: 0 auto;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin: 50px auto;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
+    /* Style des titres */
+    h2 {
+        text-align: center;
+        color: #333;
+        font-family: 'Arial', sans-serif;
+        margin-bottom: 20px;
+    }
+
+    /* Style des champs de formulaire */
+    form input, form select, form textarea {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+        transition: border-color 0.3s ease-in-out;
+    }
+
+    /* Réduire la hauteur du textarea */
+    form textarea {
+        height: 100px; /* Ajustez la hauteur selon vos besoins */
+    }
+
+    /* Style pour focus des champs */
+    form input:focus, form select:focus, form textarea:focus {
+        border-color: #007BFF;
+        outline: none;
+    }
+
+    /* Style du bouton principal */
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+    }
+
+    /* Effet au survol du bouton */
+    button:hover {
+        background-color: #45a049;
+    }
+
+    /* Bouton de reset */
+    .btn-reset {
+        background-color: red;
+        width: 100%;
+        margin-top: 10px;
+        padding: 12px;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .btn-reset:hover {
+        background-color: darkred;
+    }
+
+    /* Style pour un bouton secondaire (si vous en avez besoin) */
+    .btn-secondary {
+        display: block;
+        margin-top: 20px;
+        padding: 12px;
+        background-color: #007BFF;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .btn-secondary:hover {
+        background-color: #0056b3;
+    }
+
+    /* Style des messages d'erreur (optionnel) */
     .text-danger {
-        color: red;  /* Couleur de danger */
+        color: red;
+        font-size: 14px;
     }
-button {
-            grid-column: 1 / -1;
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .btn-reset {
-            background-color: red;
-            margin-top: 10px;
-        }
-
-        .btn-reset:hover {
-            background-color: darkred;
-        }
-
-        .btn-secondary {
-            display: inline-block;
-            margin-top: 10px;
-            text-align: center;
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: white;
-            border-radius: 6px;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        .btn-secondary:hover {
-            background-color: #0056b3;
-        }
-</style>
+  </style>
+</head>
 <body>
 
   <div class="container">
     <h2>Publier sur Facebook</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Publier</button>
-</form>
-        <button class="btn btn-dark" type="submit">CRÉER</button>
-        <button class="btn btn-danger" type="reset" class="btn-reset">Annuler</button>
-        <a href="{% url 'listPubs' %}" class="btn btn-dark">Retour</a>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Publier</button>
+        <button type="reset" class="btn-reset">Annuler</button>
     </form>
-</div>
 
+    <!-- Optionnel : un lien vers une autre page -->
+    <!-- <a href="{% url 'listPubs' %}" class="btn-secondary">Retour à la liste des publications</a> -->
+  </div>
 
 </body>
 </html>

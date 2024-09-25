@@ -1,6 +1,9 @@
 from django import forms
-from .models import Campaign,Audience, Interest, Location,Publicite
+from django.forms import ModelForm
 
+from .models import Campaign,Audience, Location,Publicite
+from django import forms
+from .models import PostPublication
 
 
 class CampaignForm(forms.ModelForm):
@@ -25,23 +28,44 @@ class EditCampagneForm(forms.ModelForm):
 
 
 class PubliciteForm(forms.ModelForm):
+    campaign = forms.ModelChoiceField(
+        queryset=Campaign.objects.all(),
+        label="Sélectionner une campagne",
+        required=True,
+        widget=forms.Select
+    )
+
     class Meta:
         model = Publicite
-        fields = ['name', 'statut', 'budget_quotidien', 'ciblage', 'objectif_optimisation', 'evenement_facturation']
+        fields = ['name', 'campaign', 'statut', 'budget_quotidien', 'objectif_optimisation', 'evenement_facturation']
         widgets = {
-            'ciblage': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
-            'statut': forms.Select(),
-            'objectif_optimisation': forms.Select(),
-            'evenement_facturation': forms.Select(),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom de la publicité'}),
+            'statut': forms.Select(attrs={'class': 'form-control'}),
+            'budget_quotidien': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Budget quotidien'}),
+            'objectif_optimisation': forms.Select(attrs={'class': 'form-control'}),
+            'evenement_facturation': forms.Select(attrs={'class': 'form-control'}),
         }
+
+
+
+# class PubliciteForm(forms.ModelForm):
+#     class Meta:
+#         model = Publicite
+#         fields = ['name', 'statut', 'budget_quotidien','objectif_optimisation', 'evenement_facturation']
+#         widgets = {
+#
+#             'statut': forms.Select(),
+#             'objectif_optimisation': forms.Select(),
+#             'evenement_facturation': forms.Select(),
+#         }
 
 
 class EditPudForm(forms.ModelForm):
     class Meta:
         model = Publicite
-        fields = ['name', 'statut', 'budget_quotidien', 'ciblage', 'objectif_optimisation', 'evenement_facturation']
+        fields = ['name', 'statut', 'budget_quotidien',  'objectif_optimisation', 'evenement_facturation']
         widgets = {
-            'ciblage': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
+
             'statut': forms.Select(),
             'objectif_optimisation': forms.Select(),
             'evenement_facturation': forms.Select(),
@@ -50,36 +74,31 @@ class EditPudForm(forms.ModelForm):
         
         
 
-
+from django.forms import inlineformset_factory
 
 class AudienceForm(forms.ModelForm):
+    # Champ pour sélectionner des localisations existantes
+    locations = forms.ModelMultipleChoiceField(
+        queryset=Location.objects.all(),
+        widget=forms.CheckboxSelectMultiple,  # Affiche des cases à cocher pour chaque localisation
+        required=True  # Le champ est facultatif
+    )
+
     class Meta:
         model = Audience
-        fields = ['name', 'description', 'age_min', 'age_max', 'gender', 'interests', 'location']
-
-    interests = forms.ModelMultipleChoiceField(
-        queryset=Interest.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-        label="Centres d'intérêt"
-    )
-
-    location = forms.ModelChoiceField(
-        queryset=Location.objects.all(),
-        required=False,
-        label="Localisation"
-    )
+        fields = ['name', 'age_min', 'age_max', 'interests', 'gender', 'locations']
 
 class LocationForm(forms.ModelForm):
     class Meta:
         model = Location
-        fields = ['name', 'country', 'region', 'city']
+        fields = ['country', 'city',]
 
+class PostPublicationForm(forms.ModelForm):
+    class Meta:
+        model = PostPublication
+        fields = ['post_type', 'message', 'image', 'video', 'description']
 
-
-
-
-class FacebookPostForm(forms.Form):
+    # Choix du type de publication (le même que dans le modèle)
     POST_TYPE_CHOICES = (
         ('message', 'Message'),
         ('image', 'Image'),
@@ -87,11 +106,14 @@ class FacebookPostForm(forms.Form):
     )
 
     post_type = forms.ChoiceField(label='Type de publication', choices=POST_TYPE_CHOICES)
+
+    # Champs pour les différents types de publication
     message = forms.CharField(label='Message', max_length=255, widget=forms.Textarea, required=False)
     image = forms.ImageField(label='Sélectionner une image', required=False)
     video = forms.FileField(label='Sélectionner une vidéo', required=False)
     description = forms.CharField(label='Description', max_length=255, required=False)
 
+    # Validation du formulaire en fonction du type de publication sélectionné
     def clean(self):
         cleaned_data = super().clean()
         post_type = cleaned_data.get('post_type')

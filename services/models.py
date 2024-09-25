@@ -4,8 +4,10 @@ from django import forms
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-
+from django.conf import settings
 from django.db import models
+
+
 
 class Campaign(models.Model):
     STATUS_CHOICES = [
@@ -53,51 +55,66 @@ class Publicite(models.Model):
         return self.name
 
 
-class Audience(models.Model):
-    """
-    Modèle représentant une audience pour une publicité.
-    """
-    name = models.CharField(max_length=100, verbose_name="Nom de l'audience")
-    description = models.TextField(verbose_name="Description de l'audience", blank=True, null=True)
-    age_min = models.PositiveIntegerField(verbose_name="Âge minimum", default=18)
-    age_max = models.PositiveIntegerField(verbose_name="Âge maximum", default=65)
-    gender = models.CharField(max_length=1, choices=[('M', 'Masculin'), ('F', 'Féminin'), ('O', 'Autre')], verbose_name="Sexe")
-    interests = models.ManyToManyField('Interest', related_name='audiences', verbose_name="Centres d'intérêt")
-    location = models.ForeignKey('Location', on_delete=models.SET_NULL, null=True, blank=True, related_name='audiences', verbose_name="Localisation")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Dernière mise à jour")
+class Publicite(models.Model):
+    name = models.CharField(max_length=255)
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+
+    # Champs de statut, objectifs et événements
+    STATUT_CHOICES = [
+        ('actif', 'Actif'),
+        ('mis_en_pause', 'Mis en pause'),
+        ('termine', 'Terminé'),
+    ]
+
+    OBJECTIFS_OPTIMISATION_CHOICES = [
+        ('clics_lien', 'Clics sur le lien'),
+        ('impressions', 'Impressions'),
+        ('engagement', 'Engagement'),
+    ]
+
+    EVENEMENTS_FACTURATION_CHOICES = [
+        ('impressions', 'Impressions'),
+        ('clics', 'Clics'),
+    ]
+
+    statut = models.CharField(max_length=12, choices=STATUT_CHOICES, default='actif')
+    budget_quotidien = models.DecimalField(max_digits=10, decimal_places=2)
+    objectif_optimisation = models.CharField(max_length=20, choices=OBJECTIFS_OPTIMISATION_CHOICES)
+    evenement_facturation = models.CharField(max_length=20, choices=EVENEMENTS_FACTURATION_CHOICES)
 
     def __str__(self):
         return self.name
 
 
 
-class Interest(models.Model):
-    """
-    Modèle représentant un centre d'intérêt pour une audience.
-    """
-    name = models.CharField(max_length=100, verbose_name="Nom du centre d'intérêt")
-
-    def __str__(self):
-        return self.name
 
 class Location(models.Model):
-    """
-    Modèle représentant une localisation pour une audience.
-    """
-    name = models.CharField(max_length=100, verbose_name="Nom de la localisation")
-    country = models.CharField(max_length=100, verbose_name="Pays")
-    region = models.CharField(max_length=100, verbose_name="Région", blank=True, null=True)
-    city = models.CharField(max_length=100, verbose_name="Ville", blank=True, null=True)
+    country = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+
 
     def __str__(self):
-        return f"{self.name}, {self.country}"
+        return f"{self.city}, {self.country}"
+
+
+class Audience(models.Model):
+    name = models.CharField(max_length=100)
+    age_min = models.IntegerField()
+    age_max = models.IntegerField()
+    interests = models.TextField()
+    gender = models.CharField(max_length=10)
+
+    # Ajout du ManyToManyField pour associer plusieurs localisations
+    locations = models.ManyToManyField(Location, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 
 
 
-class FacebookPost(models.Model):
+class PostPublication(models.Model):
     POST_TYPE_CHOICES = (
         ('message', 'Message'),
         ('image', 'Image'),
@@ -105,12 +122,18 @@ class FacebookPost(models.Model):
     )
 
     post_type = models.CharField(max_length=10, choices=POST_TYPE_CHOICES)
+    id_publication = models.CharField(max_length=255,blank=True, null=True)  # Assurez-vous que cela est correct
     message = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     video = models.FileField(upload_to='videos/', blank=True, null=True)
     description = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.post_type} - {self.id}'
+        return f'{self.post_type} - {self.id_publication}'
+
+
+
+
 

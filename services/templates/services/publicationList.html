@@ -1,18 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Résultat de la publication</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publications Facebook</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <h1>Résultat de la publication sur Facebook</h1>
-
-    {% if response %}
-        <p>Statut de la réponse : {{ response.status }}</p>
-        <p>Détails : {{ response.message }}</p>
-    {% else %}
-        <p>Aucune réponse disponible.</p>
-    {% endif %}
-
-    <a href="{% url 'publish_content' %}">Retour à la publication</a>
+    <h1>Publications Facebook</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Auteur</th>
+                <th>Message</th>
+                <th>Date de publication</th>
+                <th>URL</th>
+                <th>Likes</th>
+                <th>Commentaires</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts_info %}
+                <tr>
+                    <td>{{ post.author }}</td>
+                    <td>{{ post.message }}</td>
+                    <td>{{ post.created_time }}</td>
+                    <td><a href="{{ post.permalink_url }}">Voir</a></td>
+                    <td>{{ post.likes_count }}</td>
+                    <td>{{ post.comments_count }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
+

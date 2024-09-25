@@ -1,0 +1,84 @@
+{%  extends 'base.html' %}
+{%  load static%}
+
+
+
+
+{%  block body %}
+
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditions de Confidentialité - Gestion Publicitaire</title>
+</head>
+
+<style>
+body {
+    background-color: #ffffff;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+h1 {
+    color: #000;
+}
+
+p {
+    color: #555;
+}
+</style>
+<body>
+    <header>
+        <h1>Conditions de Confidentialité</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'AccCondition'%}">Accueil</a></li>
+                <li><a href="{% url 'ConditionConf'%}">Conditions de Confidentialité</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Introduction</h2>
+            <p>Nous nous engageons à protéger votre vie privée. Cette politique décrit comment nous collectons, utilisons et protégeons vos données.</p>
+
+            <h2>Collecte de Données</h2>
+            <p>Nous collectons des informations lorsque vous vous inscrivez sur notre site ou interagissez avec nos services.</p>
+
+            <h2>Utilisation des Données</h2>
+            <p>Les données collectées peuvent être utilisées pour améliorer nos services, vous contacter et vous informer des mises à jour.</p>
+
+            <h2>Protection des Données</h2>
+            <p>Nous mettons en œuvre diverses mesures de sécurité pour protéger vos informations personnelles.</p>
+
+            <h2>Modifications de la Politique</h2>
+            <p>Nous pouvons mettre à jour cette politique de confidentialité. Nous vous informerons de tout changement significatif.</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Gestion Publicitaire. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>
+
+
+
+{%  endblock%}
+</div>
+
+
+
+                <!-- Begin Page Content -->
+
+            <!-- End of Main Content -->
+
+
+
+
+
+
+
+</body>
+
+</html>

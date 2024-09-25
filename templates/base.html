@@ -113,6 +113,25 @@
                         <a class="collapse-item" href="{% url 'publication'%}">Creer une publicite</a>
                         <a class="collapse-item" href="{% url 'listPubs'%}">listes des publicites</a>
                         <a class="collapse-item" href="{% url 'publish_content'%}">Creer une publication</a>
+                        <a class="collapse-item" href="{% url 'liste_posts'%}">Liste des publications</a>
+
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Conditions</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-danger py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Confidentialites:</h6>
+                        <a class="collapse-item" href="{% url 'AccCondition'%}">Acceuil</a>
+                        <a class="collapse-item" href="{% url 'ConditionConf'%}">Condition Confidentialite</a>
 
                     </div>
                 </div>
@@ -553,7 +572,7 @@
 
 <!-- JavaScript pour la confirmation et le toast -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>-->
 </body>
 
 </html>

@@ -28,15 +28,36 @@ path('pub/<pk>/modifier',  modifierPubliciteView.as_view(), name='modifPub'),
  path('Pubdetail/<pk>/effacer', deletepubliciteView.as_view(), name='pubdelete'),
  path('publicitedetail/<pk>', detailPubliciteView.as_view(), name='publicitedetail'), 
 
- path('audiences/create/', CreateAudienceView.as_view(), name='create_audience'),
-path('audiences/', views.audience_list, name='audience_list'),
+
 path("paie", views.PaiementViews, name="paiement"),
 
 
-path('publish/', views.publish_content_view, name='publish_content'),
+path('publish/', PublishContentView.as_view(), name='publish_content'),
+path('liste-posts/', PostsListView.as_view(), name='liste_posts'),
 
 
 path('locations/create/', views.create_location, name='create_location'),
 path("chatter",views.ChatsViews, name="chat"),
-path("profile",views.ProfileViews, name="profil")
+path("profile",views.ProfileViews, name="profil"),
+
+
+
+
+    path('audience/create/', CreateAudienceView.as_view(), name='create_audience'),
+    path('audience/<int:pk>/edit/', UpdateAudienceView.as_view(), name='edit_audience'),
+    path('audience/<int:pk>/delete/', DeleteAudienceView.as_view(), name='delete_audience'),
+    path('audiences/', AudienceListView.as_view(), name='audience_list'),
+
+    # URLs pour les localisations
+    path('audience/<int:audience_id>/locations/', LocationListView.as_view(), name='location_list'),
+    path('audience/<int:audience_id>/locations/add/', CreateLocationView.as_view(), name='add_location'),
+    path('locations/<int:pk>/edit/', UpdateLocationView.as_view(), name='edit_location'),
+    path('locations/<int:pk>/delete/', DeleteLocationView.as_view(), name='delete_location'),
+    path("cond", views.accCondition, name="AccCondition"),
+    path("condConf", views.accConditionConf, name="ConditionConf"),
 ]
+
+
+
+
+

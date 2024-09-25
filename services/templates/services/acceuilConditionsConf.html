@@ -1,0 +1,75 @@
+{%  extends 'base.html' %}
+{%  load static%}
+
+
+
+
+{%  block body %}
+
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - Gestion Publicitaire</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<style>
+    body {
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #333;
+}
+
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+</style>
+<body>
+    <header>
+        <h1>Bienvenue sur notre plateforme de gestion publicitaire</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'AccCondition'%}">Acceuil</a></li>
+                <li><a href="{% url 'ConditionConf'%}">Conditions de Confidentialité</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Gérez vos campagnes publicitaires efficacement</h2>
+            <p>Notre plateforme vous permet de gérer facilement vos publicités et d'optimiser vos campagnes pour atteindre vos objectifs.</p>
+            <button onclick="window.location.href='conditions.html'">En savoir plus sur notre politique de confidentialité</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Gestion Publicitaire. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>
+
+
+
+{%  endblock%}
+</div>
+
+
+
+                <!-- Begin Page Content -->
+
+            <!-- End of Main Content -->
+
+
+
+
+
+
+
+</body>
+
+</html>
