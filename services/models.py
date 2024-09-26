@@ -17,6 +17,7 @@ class Campaign(models.Model):
     ]
 
     name = models.CharField(max_length=200)
+    facebookCampaign_ID = models.CharField(max_length=200,default='',null=False)
     description = models.TextField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='desactiver')
 
@@ -47,40 +48,8 @@ class Publicite(models.Model):
     name = models.CharField(max_length=200,default='')
     statut = models.CharField(max_length=12, choices=STATUT_CHOIX, default='actif')
     budget_quotidien = models.DecimalField(max_digits=10, decimal_places=2,default='' )
-    ciblage = models.TextField(help_text="Détails concernant les critères de ciblage.",default='')
     objectif_optimisation = models.CharField(max_length=20, choices=OBJECTIFS_OPTIMISATION,default='')
     evenement_facturation = models.CharField(max_length=20, choices=EVENEMENTS_FACTURATION,default='')
-
-    def __str__(self):
-        return self.name
-
-
-class Publicite(models.Model):
-    name = models.CharField(max_length=255)
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
-
-    # Champs de statut, objectifs et événements
-    STATUT_CHOICES = [
-        ('actif', 'Actif'),
-        ('mis_en_pause', 'Mis en pause'),
-        ('termine', 'Terminé'),
-    ]
-
-    OBJECTIFS_OPTIMISATION_CHOICES = [
-        ('clics_lien', 'Clics sur le lien'),
-        ('impressions', 'Impressions'),
-        ('engagement', 'Engagement'),
-    ]
-
-    EVENEMENTS_FACTURATION_CHOICES = [
-        ('impressions', 'Impressions'),
-        ('clics', 'Clics'),
-    ]
-
-    statut = models.CharField(max_length=12, choices=STATUT_CHOICES, default='actif')
-    budget_quotidien = models.DecimalField(max_digits=10, decimal_places=2)
-    objectif_optimisation = models.CharField(max_length=20, choices=OBJECTIFS_OPTIMISATION_CHOICES)
-    evenement_facturation = models.CharField(max_length=20, choices=EVENEMENTS_FACTURATION_CHOICES)
 
     def __str__(self):
         return self.name

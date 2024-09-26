@@ -13,7 +13,7 @@ urlpatterns = [
 
 path('list/campagnes', liste_campagnesView.as_view(), name='CampagneList'),
 path('creer/', CreerCampagneView.as_view(), name='creer_campagne'),
-path('camp/<pk>/modifier', modifierCampagneView.as_view(), name='modifCampagne'),
+path('camp/<int:pk>/modifier', modifierCampagneView.as_view(), name='modifCampagne'),
  path('Campdetail/<pk>/effacer', deletecampagneView.as_view(), name='Campdelete'),
  path('campagnedetail/<pk>', detailcampagneView.as_view(), name='campagnedetail'),
 
@@ -21,19 +21,19 @@ path('camp/<pk>/modifier', modifierCampagneView.as_view(), name='modifCampagne')
 
 
 
-path('creer-publicite/', CreatePubliciteView.as_view(), name='publication'),
+path('<int:pk>/creer-publicite/', CreatePubliciteView.as_view(), name='publication'),
 
-path('list-pubs/', views.list_pubs, name='listPubs'),  # URL pour la liste des publicités
+path('publicites/', ListPubliciteView.as_view(), name='listPubs'),
 path('pub/<pk>/modifier',  modifierPubliciteView.as_view(), name='modifPub'),
  path('Pubdetail/<pk>/effacer', deletepubliciteView.as_view(), name='pubdelete'),
- path('publicitedetail/<pk>', detailPubliciteView.as_view(), name='publicitedetail'), 
+ path('publicitedetail/<pk>', detailPubliciteView.as_view(), name='publicitedetail'),
 
 
 path("paie", views.PaiementViews, name="paiement"),
 
 
 path('publish/', PublishContentView.as_view(), name='publish_content'),
-path('liste-posts/', PostsListView.as_view(), name='liste_posts'),
+path('liste-posts/', ListPostsView.as_view(), name='liste_posts'),
 
 
 path('locations/create/', views.create_location, name='create_location'),

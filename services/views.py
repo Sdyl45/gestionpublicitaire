@@ -1,5 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
+
+from core.api.createCampaign import create_campaign
+from core.api.createPublicite import create_ad_set
 from .forms import CampaignForm, AudienceForm,LocationForm,PubliciteForm,EditPudForm,EditCampagneForm,PostPublicationForm
 from .models import Campaign, Audience,Location,Publicite,PostPublication
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
@@ -12,6 +15,7 @@ from services import FacebookService
 import os
 import requests
 from django.views.generic import TemplateView
+
 # Create your views here.
 
 
@@ -91,12 +95,12 @@ class liste_campagnesView(ListView):
 #     form_class = CampagneForm
 #     success_url = reverse_lazy('CampagneList')
 
-
-ACCESS_TOKEN = 'EAAHZAsb1umoIBO7jO2sCO0a7bSYtZCMphKy8YgSpEoKItxivvAYhOKVB2YsIZBdo0rj6U13fuUppvSqWGSVLPwITWLo24gqeLS3yLhc7DAYdaw7WiGx8a79JZCroixu4rlvBzZCMrD7vROokSfIeZBW1WdLzOZADk1sqhHMZBxR369h4TJyskqZAybIYR7zs2FUALHZBc8u1cZB'
-ACCOUNT_ID = 'act_1822221194968260'
-
-# Initialiser l'API
-FacebookAdsApi.init(access_token=ACCESS_TOKEN)
+#
+# ACCESS_TOKEN = 'EAAHZAsb1umoIBO7jO2sCO0a7bSYtZCMphKy8YgSpEoKItxivvAYhOKVB2YsIZBdo0rj6U13fuUppvSqWGSVLPwITWLo24gqeLS3yLhc7DAYdaw7WiGx8a79JZCroixu4rlvBzZCMrD7vROokSfIeZBW1WdLzOZADk1sqhHMZBxR369h4TJyskqZAybIYR7zs2FUALHZBc8u1cZB'
+# ACCOUNT_ID = 'act_1822221194968260'
+#
+# # Initialiser l'API
+# FacebookAdsApi.init(access_token=ACCESS_TOKEN)
 class CreerCampagneView(LoginRequiredMixin, CreateView):
     template_name = 'services/MesCampagme.html'
     model = Campaign
@@ -104,34 +108,27 @@ class CreerCampagneView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('CampagneList')
 
     def form_valid(self, form):
-        # Sauvegarder la campagne
-        self.object = form.save()
-
-        # Appeler la fonction pour créer la campagne dans Facebook
         try:
-            # Créer une instance de AdAccount
-            account = AdAccount(ACCOUNT_ID)
+            # Tenter de créer la campagne sur Facebook
+            facebook_id = create_campaign(form.cleaned_data.get('name'))
+            if not facebook_id:
+                form.add_error(None, "La création de la campagne a échoué.")
+                return self.form_invalid(form)
 
-            # Définir les paramètres de la campagne
-            params = {
-                'name': self.object.name,  # Utiliser le nom de la campagne sauvegardée
-                'objective': 'OUTCOME_TRAFFIC',
-                'status': 'PAUSED',
-                'special_ad_categories': [],
-            }
+            # Sauvegarder l'instance de campagne
+            instance = form.save(commit=False)
+            instance.facebookCampaign_ID = facebook_id
+            instance.save()
 
-            # Créer la campagne
-            campaign = account.create_campaign(fields=[], params=params)
-            print(f"Campaign created with ID: {campaign['id']}")
+            # Vérifier si l'utilisateur souhaite créer une publicité
+            if form.cleaned_data.get('create_ad'):
+                return redirect('publication')  # Remplacez par le nom de votre URL pour créer une publicité
+
+            return super().form_valid(form)
+
         except Exception as e:
-            print(f"Une erreur s'est produite lors de la création de la campagne : {e}")
-            # Vous pourriez vouloir gérer l'erreur, par exemple en affichant un message d'erreur
-
-        # Vérifier si l'utilisateur souhaite créer une publicité
-        if form.cleaned_data.get('create_ad'):
-            return redirect('publication')  # Remplacez par le nom de votre URL pour créer une publicité
-
-        return super().form_valid(form)
+            form.add_error(None, f"Une erreur s'est produite : {str(e)}")
+            return self.form_invalid(form)
 
 class modifierCampagneView(UpdateView):
     template_name = 'services/MesCampagme.html'
@@ -156,30 +153,7 @@ class detailcampagneView(DetailView):
     context_object_name = 'campagne'
 # creation de campagnes views fin
 
-# creation de publicite views debut
 
-
-#
-# def creer_publicite(request):
-#     if request.method == 'POST':
-#         form = PubliciteForm(request.POST, request.FILES)  # N'oubliez pas de gérer les fichiers
-#         if form.is_valid():
-#             form.save()  # Enregistrer la publicité dans la base de données
-#             return redirect('listPubs')  # Redirigez vers une page de liste ou une autre page
-#     else:
-#         form = PubliciteForm()
-#
-#     return render(request, 'services/CreerPublication.html', {'form': form})
-
-# class CreatePubliciteViews(LoginRequiredMixin,UserPassesTestMixin, CreateView):
-
-# Remplacez par vos informations
-ACCESS_TOKEN = 'EAAHZAsb1umoIBO7jO2sCO0a7bSYtZCMphKy8YgSpEoKItxivvAYhOKVB2YsIZBdo0rj6U13fuUppvSqWGSVLPwITWLo24gqeLS3yLhc7DAYdaw7WiGx8a79JZCroixu4rlvBzZCMrD7vROokSfIeZBW1WdLzOZADk1sqhHMZBxR369h4TJyskqZAybIYR7zs2FUALHZBc8u1cZB'
-ACCOUNT_ID = 'act_1822221194968260'
-APP_ID = '520832387291778'
-
-# Initialiser l'API Facebook
-FacebookAdsApi.init(access_token=ACCESS_TOKEN)
 
 class CreatePubliciteView(LoginRequiredMixin, CreateView):
     template_name = 'services/CreerPublication.html'
@@ -188,59 +162,37 @@ class CreatePubliciteView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('listPubs')
 
     def form_valid(self, form):
-        self.object = form.save()  # Sauvegarder la publicité
-
-        # Récupérer les champs supplémentaires du formulaire
-        campagne = self.object.campaign
-        statut = self.object.statut
-        budget_quotidien = self.object.budget_quotidien
-        objectif_optimisation = self.object.objectif_optimisation
-        evenement_facturation = self.object.evenement_facturation
+        campagne_id = self.kwargs.get('pk')
 
         try:
-            # Vérifier l'état de la campagne
-            campaign = Campaign(campagne.campaign_id)
-            campaign_data = campaign.api_get(fields=['id', 'name', 'status'])
+            campagne = Campaign.objects.get(pk=campagne_id)
+        except Campaign.DoesNotExist:
+            form.add_error(None, "La campagne demandée n'existe pas.")
+            return self.form_invalid(form)
 
-            if campaign_data['status'] == 'ARCHIVED':
-                print("La campagne est archivée. Veuillez l'activer avant de créer des ensembles de publicités.")
-                return super().form_invalid(form)  # Échouer le formulaire si la campagne est archivée
+        ad_set_id = create_ad_set(int(campagne.facebookCampaign_ID), form.cleaned_data.get('name'))
 
-            # Paramètres de l'ensemble de publicités
-            params = {
-                'name': self.object.name,
-                'optimization_goal': objectif_optimisation,
-                'billing_event': evenement_facturation,
-                'bid_amount': '250',  # Exemple de montant d'enchère
-                'daily_budget': str(int(budget_quotidien) * 100),  # En centimes
-                'campaign_id': campagne.campaign_id,  # Utiliser l'ID de la campagne sélectionnée
-                'status': statut,
-                'promoted_object': {
-                    'application_id': APP_ID,
-                    'custom_event_type': 'PURCHASE'
-                },
-                'targeting': {
-                    'geo_locations': {
-                        'countries': ['FR'],  # Exemple de ciblage géographique
-                    },
-                    'age_min': 18,
-                    'age_max': 65,
-                    'genders': [1],  # 1 pour femme, 2 pour homme
-                },
-            }
 
-            # Créer l'objet AdAccount
-            ad_account = AdAccount(ACCOUNT_ID)
+        if ad_set_id is None:
+            form.add_error(None, "Échec de la création de l'ensemble de publicités.")
+            return self.form_invalid(form)
 
-            # Créer l'ensemble de publicités sur Facebook
-            ad_set = ad_account.create_ad_set(params=params)
-            print(f"Ensemble de publicités créé avec succès : {ad_set}")
-
-        except Exception as e:
-            print(f"Une erreur s'est produite lors de la création de l'ensemble de publicités : {e}")
-            return super().form_invalid(form)  # Échouer le formulaire en cas d'erreur
+        instance = form.save(commit=False)
+        instance.campaign = campagne
+        instance.facebookCampaign_ID = ad_set_id
+        instance.save()
 
         return super().form_valid(form)
+
+
+
+
+class ListPubliciteView(LoginRequiredMixin,ListView):
+    model = Audience
+    template_name = 'services/ListPubs.html'
+    context_object_name = 'publicites'
+    def get_queryset(self):
+        return Publicite.objects.all()
 
 
 class modifierPubliciteView(UpdateView):
@@ -261,9 +213,7 @@ class detailPubliciteView(DetailView):
     template_name = 'services/DetailPublicite.html'
     model = Publicite
     context_object_name = 'publicite'
-def list_pubs(request):
-    publicites = Publicite.objects.all()  # Récupère toutes les publicités
-    return render(request, 'services/ListPubs.html', {'publicites': publicites})
+
 
 
 def CreatePublicationView(request):
@@ -372,36 +322,44 @@ def ProfileViews(request):
  return render(request,'services/profile.html')
 
 
-class PostsListView(LoginRequiredMixin, TemplateView):
+class ListPostsView(LoginRequiredMixin, TemplateView):
+    """
+    Vue Django pour lister les publications d'une page Facebook dans un DataTable.
+    """
     template_name = 'services/liste_posts.html'
+    page_id = '434662436390612'  # ID de la page Facebook
+    access_token = 'EAAHZAsb1umoIBO8FLH4QB9w3h1FZCQFRVPe6ap2Li0O8F989LXn3KIRr17zDYK2oBrMdjAWPHpMZBMIVK0QuPJNa4bgcJAiH01cWmZAebNbulipDQr7wPWHkg3TxFgPqEjRzNMAW1JLVR34yP3wYRQc7NfiG9XBNpz56AZCpCmRDNWgoSgOdUfpWCPdqDbx61NRief3GvlgwRHxy1iZBZBIlYS4ltr00X85'  # Jeton d'accès Facebook
 
-    # ID de la page Facebook et token d'accès
-    page_id = '434662436390612'
-    access_token = 'EAAHZAsb1umoIBOxZCZBmogImHZBR5zAv6rodKAaRFCaeYB7yDFpxGV2eJLaWpe9ZBsNA5PEhyZBwZCjyLzZARDWohd0ZC2kWgzDPo08ypZCXZCQZBEYFTjGFcFocBBh21tZAm9lQmwiefmejPC7eoylO7SETmJKrRkL4HRVCnUPChyodE48Ahy4NT6QlZBlH0ZBgzoMxfeVNARbbZBvjsR9ac80RsSpfZCTDb3bbHhxk3'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Appel API pour récupérer les publications
+        posts = self.get_posts()
+
+        print(posts)  # Vérifie les données dans la console
+
+        # Ajouter les posts récupérés au contexte
+        context['posts'] = posts
+        return context
 
     def get_posts(self):
         """
-        Récupère les publications de la page Facebook via l'API Graph.
+        Récupère les publications de la page Facebook et renvoie une liste de posts.
         """
-        url = f'https://graph.facebook.com/v17.0/{self.page_id}/posts'
-        params = {
+        get_posts_url = f'https://graph.facebook.com/v17.0/{self.page_id}/posts'
+        get_posts_params = {
             'access_token': self.access_token
         }
-        response = requests.get(url, params=params)
+
+        response = requests.get(get_posts_url, params=get_posts_params)
 
         if response.status_code == 200:
-            return response.json().get('data', [])
+            info_post = response.json()
+            return info_post.get('data', [])  # Retourne la liste des publications
         else:
+            print(f"Erreur lors de la récupération des publications: {response.status_code} - {response.json()}")
             return []
 
-    def get_context_data(self, **kwargs):
-        """
-        Ajoute les données des posts au contexte.
-        """
-        context = super().get_context_data(**kwargs)
-        posts = self.get_posts()  # Récupère les posts de l'API
-        context['posts'] = posts  # Ajoute les posts au contexte pour le template
-        return context
 
 
 
@@ -409,99 +367,83 @@ class PostsListView(LoginRequiredMixin, TemplateView):
 
 
 class PublishContentView(LoginRequiredMixin, CreateView):
-    """
-    Vue Django pour créer et publier du contenu sur un profil Facebook.
-    """
     model = PostPublication
     template_name = 'services/CreerPublication.html'
     form_class = PostPublicationForm
     success_url = reverse_lazy('liste_posts')
 
+    # ID de la page Facebook et jeton d'accès
+    page_id = '434662436390612'
+    access_token = 'EAAHZAsb1umoIBO3XMFPOdJYjx00pS2xsXaHtqcylfZC2MZCRXM6VZCIGl46gcMQud0wMZCm9UL1p7dtnpuacbdQQG66L9iyoHuDl0icSXxjuwacq6h6qmZC1kC37hZAyeqMaYsjwCwxBaZCLesEUmD9IRnZCPAbsuH2gUHHeONuppKyTrXBUaWoJNBM8PADtpmH1qIWmmU029OxVCAiKNqJRvuuxLdaphci9I'
+
+    # Chemin vers le répertoire des images et vidéos
+    media_directory = r'C:\Users\LYAN\PycharmProjects\GestionPublicitaire\static\images'
+
     def form_valid(self, form):
-        # Préparer l'objet mais ne pas le sauvegarder immédiatement
         post = form.save(commit=False)
-        post.user = self.request.user  # Associe l'utilisateur connecté
+        post.user = self.request.user
 
-        # Informations de l'utilisateur Facebook et jeton d'accès
-        profile_id = '434662436390612'  # ID du profil utilisateur Facebook
-        access_token = 'EAAHZAsb1umoIBO8FLH4QB9w3h1FZCQFRVPe6ap2Li0O8F989LXn3KIRr17zDYK2oBrMdjAWPHpMZBMIVK0QuPJNa4bgcJAiH01cWmZAebNbulipDQr7wPWHkg3TxFgPqEjRzNMAW1JLVR34yP3wYRQc7NfiG9XBNpz56AZCpCmRDNWgoSgOdUfpWCPdqDbx61NRief3GvlgwRHxy1iZBZBIlYS4ltr00X85'
-        base_url = f'https://graph.facebook.com/{profile_id}'
+        response = self._publish_to_facebook(post)
 
-        # Publication en fonction du type de post
-        response = self._publish_to_facebook(post, base_url, access_token)
-
-        # Gestion des erreurs de publication
         if 'error' in response:
             form.add_error(None, f"Erreur lors de la publication sur Facebook: {response['error']}")
             return self.form_invalid(form)
 
-        # Si la publication sur Facebook réussit, on sauvegarde l'ID de publication
         post.id_publication = response.get('id')
-
-        # Sauvegarde de l'objet PostPublication dans la base de données
         post.save()
 
         return super().form_valid(form)
 
-    def _publish_to_facebook(self, post, base_url, access_token):
-        """
-        Publie le contenu sur Facebook en fonction du type de publication (message, image, vidéo).
-        """
+    def _publish_to_facebook(self, post):
         if post.post_type == 'message':
-            return self._publish_message(post.message, base_url, access_token)
+            return self._publish_message(post.message)
         elif post.post_type == 'image' and post.image:
-            return self._publish_image(post.message, post.image, base_url, access_token)
+            image_path = os.path.join(self.media_directory, os.path.basename(post.image.path))
+            return self._publish_image(image_path, post.message)
         elif post.post_type == 'video' and post.video:
-            return self._publish_video(post.description, post.video, base_url, access_token)
+            video_path = os.path.join(self.media_directory, os.path.basename(post.video.path))
+            return self._publish_video(video_path, post.description)
         else:
             return {"error": "Type de publication non pris en charge."}
 
-    def _publish_message(self, message, base_url, access_token):
-        """
-        Publie un message texte sur le profil Facebook.
-        """
-        url = f'{base_url}/feed'
-        params = {
+    def _publish_message(self, message):
+        post_url = f'https://graph.facebook.com/v17.0/{self.page_id}/feed'
+        post_params = {
             'message': message,
-            'access_token': access_token
+            'access_token': self.access_token
         }
-        return self._make_request(url, params)
-
-    def _publish_image(self, message, image_file, base_url, access_token):
-        """
-        Publie une image accompagnée d'un message sur le profil Facebook.
-        """
-        url = f'{base_url}/photos'
-        files = {'source': image_file}
-        data = {
-            'message': message,
-            'access_token': access_token
-        }
-        return self._make_request(url, data, files)
-
-    def _publish_video(self, description, video_file, base_url, access_token):
-        """
-        Publie une vidéo accompagnée d'une description sur le profil Facebook.
-        """
-        url = f'{base_url}/videos'
-        files = {'source': video_file}
-        data = {
-            'description': description,
-            'access_token': access_token
-        }
-        return self._make_request(url, data, files)
-
-    def _make_request(self, url, data, files=None):
-        """
-        Effectue une requête HTTP vers l'API Facebook.
-        """
-        response = requests.post(url, data=data, files=files) if files else requests.post(url, data=data)
+        response = requests.post(post_url, data=post_params)
         return self._handle_response(response)
 
+    def _publish_image(self, image_path, message):
+        post_url = f'https://graph.facebook.com/v17.0/{self.page_id}/photos'
+        if os.path.exists(image_path):
+            with open(image_path, 'rb') as image_file:
+                post_params = {
+                    'access_token': self.access_token,
+                    'message': message
+                }
+                files = {'source': image_file}
+                response = requests.post(post_url, data=post_params, files=files)
+            return self._handle_response(response)
+        else:
+            return {"error": f"Fichier image non trouvé à {image_path}."}
+
+    def _publish_video(self, video_path, description):
+        post_url = f'https://graph.facebook.com/v17.0/{self.page_id}/videos'
+        if os.path.exists(video_path):
+            with open(video_path, 'rb') as video_file:
+                post_params = {
+                    'access_token': self.access_token,
+                    'description': description
+                }
+                files = {'source': video_file}
+                response = requests.post(post_url, data=post_params, files=files)
+            return self._handle_response(response)
+        else:
+            return {"error": f"Fichier vidéo non trouvé à {video_path}."}
+
     def _handle_response(self, response):
-        """
-        Gère la réponse de l'API Facebook et renvoie le résultat ou une erreur.
-        """
         if response.status_code == 200:
             return response.json()
         else:
@@ -513,11 +455,9 @@ class PublishContentView(LoginRequiredMixin, CreateView):
                 "error": f"Échec de la publication. Code: {response.status_code}, Erreur: {error_message}"
             }
 
-    def form_invalid(self, form):
-        """
-        Gère la réponse dans le cas où le formulaire est invalide.
-        """
-        return super().form_invalid(form)
+
+
+
 
 
 

@@ -1,41 +1,60 @@
+<!-- services/liste_posts.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Publications</title>
+    <!-- Inclure le CSS de DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+</head>
+<body>
+    <h1>Liste des Publications</h1>
+
+    <table id="postsTable" class="display">
+        <thead>
+            <tr>
+                <th>Post ID</th>
+                <th>Message</th>
+                <th>Date de création</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td>{{ post.id }}</td>
+                <td>{{ post.message|default:"No Message" }}</td>
+                <td>{{ post.created_time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Inclure jQuery et DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+    <!-- Script pour initialiser le DataTable -->
+    <script>
+        $(document).ready(function() {
+            $('#postsTable').DataTable();
+        });
+    </script>
+</body>
+</html>
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content %}
-    <div class="container mt-5">
-        <h2 class="text-center">Liste des Publications Facebook</h2>
-        <table id="postsTable" class="display table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>ID Publication</th>
-                    <th>Message</th>
-                    <th>Date de Création</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for post in posts %}
-                    <tr>
-                        <td>{{ post.id }}</td>
-                        <td>{{ post.message|default:"Pas de message" }}</td>
-                        <td>{{ post.created_time }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
 
-    <!-- Inclusion des scripts DataTables -->
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('#postsTable').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/French.json"
-                }
-            });
-        });
-    </script>
+{% block body %}
+
+
+
 {% endblock %}
+
+
+
+</body>
+
+</html>

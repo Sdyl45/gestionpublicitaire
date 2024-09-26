@@ -28,6 +28,7 @@
                 <th>Nom</th>
                 <th>Description</th>
                 <th>Statut</th>
+                <th>Creer une Pub</th>
 
                 <th>Action</th>
             </tr>
@@ -39,27 +40,31 @@
                                     <td>{{ campagne.name }}</td>
                                     <td>{{ campagne.description | truncatechars:5 }}</td>
                                     <td>{{ campagne.status }}</td>
+                                    <td>{{ campagne.campaign_id }}</td>
 
                                     <td>
-
+                                        {% comment %}Bouton de creation de pubs{% endcomment %}
+                                        <a href="{% url 'publication' campagne.pk %}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-hand"></i> new pub
+                                        </a>
                                         <a href="{% url 'modifCampagne' campagne.pk %}" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i> edit
                                         </a>
                                         <!-- Lien de suppression avec confirmation -->
-<a href="{% url 'Campdelete' campagne.pk %}" class="btn btn-danger btn-sm" onclick="return confirmDelete();">
-    <i class="fas fa-trash"></i> delete
-</a>
+                                        <a href="{% url 'Campdelete' campagne.pk %}" class="btn btn-danger btn-sm" onclick="return confirmDelete();">
+                                            <i class="fas fa-trash"></i> delete
+                                        </a>
 
-<!-- Toast de confirmation -->
-<div id="toast" class="toast" style="position: fixed; right: 20px; top: 20px; display: none;">
-    <div class="toast-header">
-        <strong class="mr-auto">Confirmation</strong>
-        <button type="button" class="ml-2 mb-1 close" onclick="hideToast();">&times;</button>
-    </div>
-    <div class="toast-body">
-        La campagne a été supprimée avec succès !
-    </div>
-</div>
+                                        <!-- Toast de confirmation -->
+                                        <div id="toast" class="toast" style="position: fixed; right: 20px; top: 20px; display: none;">
+                                            <div class="toast-header">
+                                                <strong class="mr-auto">Confirmation</strong>
+                                                <button type="button" class="ml-2 mb-1 close" onclick="hideToast();">&times;</button>
+                                            </div>
+                                            <div class="toast-body">
+                                                La campagne a été supprimée avec succès !
+                                            </div>
+                                        </div>
 
                                     </td>
                                 </tr>

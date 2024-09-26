@@ -28,23 +28,14 @@ class EditCampagneForm(forms.ModelForm):
 
 
 class PubliciteForm(forms.ModelForm):
-    campaign = forms.ModelChoiceField(
-        queryset=Campaign.objects.all(),
-        label="Sélectionner une campagne",
-        required=True,
-        widget=forms.Select
-    )
-
     class Meta:
         model = Publicite
-        fields = ['name', 'campaign', 'statut', 'budget_quotidien', 'objectif_optimisation', 'evenement_facturation']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom de la publicité'}),
-            'statut': forms.Select(attrs={'class': 'form-control'}),
-            'budget_quotidien': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Budget quotidien'}),
-            'objectif_optimisation': forms.Select(attrs={'class': 'form-control'}),
-            'evenement_facturation': forms.Select(attrs={'class': 'form-control'}),
-        }
+        fields = ['name', 'statut', 'budget_quotidien', 'objectif_optimisation', 'evenement_facturation']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Assurez-vous que les campagnes disponibles sont chargées dans le champ "campaign"
+        # self.fields['campaign'].queryset = Campaign.objects.all()
 
 
 
@@ -65,7 +56,7 @@ class EditPudForm(forms.ModelForm):
         model = Publicite
         fields = ['name', 'statut', 'budget_quotidien',  'objectif_optimisation', 'evenement_facturation']
         widgets = {
-
+            'ciblage': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
             'statut': forms.Select(),
             'objectif_optimisation': forms.Select(),
             'evenement_facturation': forms.Select(),
