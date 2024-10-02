@@ -6,10 +6,13 @@
 </head>
 {% block body %}
 <body>
- nom de la publicite:<p>{{ publicite.titre }}</p>
-sa description:<p>{{ publicite.description}}</p>
-son contenu:<p>{{publicite.type_contenu }}</p>
-type d'image:<p>{{ publicite.fichier }}</p>
+ nom de la publicite:<p>{{ publicite.name }}</p><br>
+ STATUTS:<p>{{ publicite.statut}}</p><br>
+BUDGET QUOTIDIEN:<p>{{publicite.budget_quotidien }}</p><br>
+OBJECTIFS:<p>{{ publicite.objectif_optimisation }}</p><br>
+EVENEMENT:<p>{{ publicite.evenement_facturation }}</p><br>
+SA CAMPAGNE:<p>{{ campagne.pk }}</p>:<br>
+
 <a href="{%url 'listPubs'%}" class="btn btn">Retour</a>
 {% endblock %}
 

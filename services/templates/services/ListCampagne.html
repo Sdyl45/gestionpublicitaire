@@ -28,8 +28,6 @@
                 <th>Nom</th>
                 <th>Description</th>
                 <th>Statut</th>
-                <th>Creer une Pub</th>
-
                 <th>Action</th>
             </tr>
         </thead>
@@ -40,7 +38,6 @@
                                     <td>{{ campagne.name }}</td>
                                     <td>{{ campagne.description | truncatechars:5 }}</td>
                                     <td>{{ campagne.status }}</td>
-                                    <td>{{ campagne.campaign_id }}</td>
 
                                     <td>
                                         {% comment %}Bouton de creation de pubs{% endcomment %}

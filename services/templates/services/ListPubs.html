@@ -13,7 +13,7 @@
                     <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-left:650px;">
 
                         {% if user.role == 'admin' or user.role == 'directeur_marketing' %}
-                        <a href="{% url 'publication' %}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i
+                        <a href="" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i
                                 class="text-white-50"></i>Creer une publicite</a>
                     </div>
                     {% endif %}
@@ -29,7 +29,6 @@
                 <th>NOM</th>
                 <th>STATUTS</th>
                 <th>BUDGET QUOTIDIEN</th>
-                <th>CIBLE</th>
                 <th>OBJECTIFS</th>
                 <th>EVENEMENT</th>
                 <th>Action</th>
@@ -41,7 +40,6 @@
                     <td>{{ publicite.name }}</td>
                     <td>{{ publicite.statut | truncatechars:5 }}</td>
                     <td>{{ publicite.budget_quotidien }}</td>
-                    <td>{{ publicite.ciblage }}</td>
                     <td>{{ publicite.objectif_optimisation }}</td>
                     <td>{{ publicite.evenement_facturation }}</td>
 

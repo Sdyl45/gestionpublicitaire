@@ -5,41 +5,60 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8dcb451-7f46-4278-9331-23e5d3c72517" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/media/images/orangelogo_euGmzWh.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/videos/video_pBpTfYS.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/api/BoostPublication.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/templates/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/templates/services/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/templates/services/afficher_publications.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/templates/services/boost_post.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/templates/services/boosted_post_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/templates/services/recupLikeAndComment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/GestionPublicitaire.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GestionPublicitaire.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/api/createCampaign.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/api/createCampaign.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/api/createPublicationImage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/api/createPublicationVideo.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/core/api/createPublicite.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/api/createPublicite.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/logo1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/logo1_74J5YD3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/logo1_YQXl96R.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/logo1_cl3pfFf.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/logo1_jUs5Fwl.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/logo2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/logo2_lS0zZLx.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/mage2_PwjXcDn.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/mage2_Uik6yNy.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/mage2_Vm3M8O9.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/mage2_vraMcpH.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/orangelogo_7eYZuZ1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/orangelogo_9iQlkXO.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/orangelogo_CvneFu3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/orangelogo_Pjz5J7q.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/images/orangelogo_kqdriRr.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/api/recupLikeAndComment.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/images/mage2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/images/mage2_KMQoDwM.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/images/mage2_c63ySLw.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/images/mtnlogo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/images/mtnlogo_1krYW24.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/images/mtnlogo_9qdUTmm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/images/orangelogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/images/orangelogo_euGmzWh.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video_25UI0tg.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video_9bGHNbq.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video_FRzItd1.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video_MW340T6.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video_WXBBUEn.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video_b0Sl2Iy.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video_deeUY9H.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video_m1pe2ne.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video_mhzxR7u.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video_nWlhSEa.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video_pBpTfYS.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/videos/video_z7EbFYq.mp4" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/services/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0002_alter_publicite_evenement_facturation_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0003_alter_publicite_ciblage.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0004_remove_publicite_ciblage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/migrations/0002_campaign_facebookcampaign_id.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/migrations/0003_remove_publicite_campaign_and_more.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/services/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/templates/services/CreerPublication.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/services/CreerPublication.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/templates/services/DetailCampagne.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/services/DetailCampagne.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/templates/services/DetailPublicite.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/services/DetailPublicite.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/templates/services/ListCampagne.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/services/ListCampagne.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/templates/services/ListPubs.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/services/ListPubs.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/templates/services/Publication_List.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/services/Publication_List.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/templates/services/blank.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/templates/services/charts.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/services/templates/services/liste_posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/services/liste_posts.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utilisateurs/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/utilisateurs/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utilisateurs/migrations/0002_remove_utilisateur_repeat_password.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utilisateurs/migrations/0003_utilisateur_confirm_password.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utilisateurs/migrations/0004_remove_utilisateur_confirm_password.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,22 +91,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python.createCampaign.executor": "Run",
-    "Python.createPublication.executor": "Run",
-    "Python.createPublicationImage.executor": "Run",
-    "Python.createPublicite.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.recupLikeAndComment.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/LYAN/PycharmProjects/GestionPublicitaire/service"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.BoostPublication.executor&quot;: &quot;Run&quot;,
+    &quot;Python.createCampaign.executor&quot;: &quot;Run&quot;,
+    &quot;Python.createPublication.executor&quot;: &quot;Run&quot;,
+    &quot;Python.createPublicationImage.executor&quot;: &quot;Run&quot;,
+    &quot;Python.createPublicite.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.recupLikeAndComment.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/LYAN/PycharmProjects/GestionPublicitaire/service&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\LYAN\PycharmProjects\GestionPublicitaire\service" />

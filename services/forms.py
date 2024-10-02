@@ -97,7 +97,6 @@ class PostPublicationForm(forms.ModelForm):
     )
 
     post_type = forms.ChoiceField(label='Type de publication', choices=POST_TYPE_CHOICES)
-
     # Champs pour les différents types de publication
     message = forms.CharField(label='Message', max_length=255, widget=forms.Textarea, required=False)
     image = forms.ImageField(label='Sélectionner une image', required=False)
@@ -125,3 +124,17 @@ class PostPublicationForm(forms.ModelForm):
                 self.add_error('video', 'La vidéo est obligatoire pour une publication de type vidéo.')
 
         return cleaned_data
+
+
+
+
+from .models import Campaign, BoostedPost
+
+
+
+
+class BoostedPostForm(forms.ModelForm):
+    class Meta:
+        model = BoostedPost
+        fields = ['post_id', 'page_id', 'ad_set_id']
+

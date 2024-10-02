@@ -19,7 +19,7 @@
                         <table class="table table-sm table-hover" id="dataTable3" width="100%">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Post ID</th>
                                     <th>Message</th>
                                     <th>Création</th>
                                     <th>Description</th>
@@ -35,16 +35,12 @@
                                     <td>{{ post.message|default:"No Message" }}</td>
                                     <td>{{ post.created_at }}</td>
                                     <td>{{ post.description }}</td>
-                                    <td>{{ post.comment.count }}</td>
-                                    <td>{{ post.like.count }}</td>
+                                    <td>{{ post.comment_set.count }}</td>
+                                    <td>{{ post.likes.count }}</td>
                                     <td>
-                                        {% if post.id_publication %}
-                                            <a href="{% url 'edit_post' post.id_publication %}" class="btn btn-warning btn-sm">
-                                                <i class="fas fa-edit"></i> Modifier
-                                            </a>
-                                        {% else %}
-                                            <span class="text-muted">Modifier indisponible</span>
-                                        {% endif %}
+                                        <a href="{% url 'edit_post' post.id %}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Modifier
+                                        </a>
                                         <a href="{% url 'delete_post' post.id %}" class="btn btn-danger btn-sm">
                                             <i class="fas fa-trash"></i> Supprimer
                                         </a>

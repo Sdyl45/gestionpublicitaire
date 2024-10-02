@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block body %}
+<h1>Liste des Boosts</h1>
+
+<table id="boostedPostsTable" class="display">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Post ID</th>
+            <th>Page ID</th>
+            <th>Ensemble de Publicités</th>
+            <th>Date de Création</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in boosted_posts %}
+        <tr>
+            <td>{{ post.id }}</td>
+            <td>{{ post.post_id }}</td>
+            <td>{{ post.page_id }}</td>
+            <td>{{ post.ad_set_id }}</td>
+            <td>{{ post.created_at }}</td>
+            <td>
+                <form action="{% url 'stop_boost' post.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning btn-sm">Arrêter</button>
+                </form>
+                <form action="{% url 'delete_boost' post.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                </form>
+                <a href="{% url 'edit_boost' post.pk %}" class="btn btn-primary btn-sm">Modifier</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Inclusion de jQuery et DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#boostedPostsTable').DataTable();
+    });
+</script>
+
+{% endblock %}

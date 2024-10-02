@@ -13,7 +13,7 @@ class Campaign(models.Model):
     STATUS_CHOICES = [
         ('active', 'Activer'),
         ('paused', 'Suspendu'),
-        ('completed', 'desactiver'),
+        ('ARCHIVED', 'Archived'),
     ]
 
     name = models.CharField(max_length=200)
@@ -83,15 +83,17 @@ class Audience(models.Model):
 
 
 
+from django.db import models
+from django.conf import settings
+
 class PostPublication(models.Model):
     POST_TYPE_CHOICES = (
         ('message', 'Message'),
         ('image', 'Image'),
         ('video', 'Vidéo'),
     )
-
+    id_publication = models.CharField(max_length=255,primary_key=True)  # Assurez-vous que cela est correct
     post_type = models.CharField(max_length=10, choices=POST_TYPE_CHOICES)
-    id_publication = models.CharField(max_length=255,blank=True, null=True)  # Assurez-vous que cela est correct
     message = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     video = models.FileField(upload_to='videos/', blank=True, null=True)
@@ -106,3 +108,54 @@ class PostPublication(models.Model):
 
 
 
+class Like(models.Model):
+    post = models.ForeignKey(PostPublication, related_name='likes', on_delete=models.CASCADE)  # Utiliser 'likes' comme related_name
+    liker_id = models.CharField(max_length=255)  # ID de l'utilisateur qui a liké depuis Facebook
+    liker_name = models.CharField(max_length=255)  # Nom de l'utilisateur qui a liké
+
+    def __str__(self):
+        return f'Like by {self.liker_name} on {self.post_type}'
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(PostPublication, on_delete=models.CASCADE)
+    comment_id = models.CharField(max_length=255)
+    message = models.TextField()
+    commenter_name = models.CharField(max_length=255)
+    created_time = models.DateTimeField()
+
+
+
+class BoostedPost(models.Model):
+    post_id = models.CharField(max_length=100)
+    page_id = models.CharField(max_length=100)
+    ad_set_id = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def stop_boost(self):
+        # Logique pour arrêter le boost via l'API Facebook
+        pass
+
+    def delete_boost(self):
+        # Logique pour supprimer la publication boostée via l'API Facebook
+        pass
+    def __str__(self):
+        return self.posted_by
+
+
+
+
+
+
+class FacebookPostInfo(models.Model):
+    post_id = models.CharField(max_length=255)  # ID de la publication Facebook
+    posted_by = models.CharField(max_length=255)  # Nom de l'utilisateur qui a posté
+    created_time = models.DateTimeField()  # Date de création de la publication
+    message = models.TextField()  # Message de la publication
+    likes_count = models.IntegerField(default=0)  # Nombre de likes
+    comments_count = models.IntegerField(default=0)  # Nombre de commentaires
+    comment_id = models.CharField(max_length=255, blank=True, null=True)  # ID du commentaire
+    like_id = models.CharField(max_length=255, blank=True, null=True)  # ID du like
+
+    def __str__(self):
+        return f"Post ID: {self.post_id} by {self.posted_by}"

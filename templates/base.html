@@ -114,6 +114,26 @@
                         <a class="collapse-item" href="{% url 'listPubs'%}">listes des publicites</a>
                         <a class="collapse-item" href="{% url 'publish_content'%}">Creer une publication</a>
                         <a class="collapse-item" href="{% url 'liste_posts'%}">Liste des publications</a>
+                        <a class="collapse-item" href="{% url 'afficher_publications'%}">Infos des publications</a>
+
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilitie14"
+                    aria-expanded="true" aria-controls="collapseUtilitie14">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Booster</span>
+                </a>
+                <div id="collapseUtilitie14" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-danger py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Booster vos publications:</h6>
+
+                        <a class="collapse-item" href="{% url 'boost_post'%}">Boosters Ici</a>
+                        <a class="collapse-item" href="{% url 'boosted_post_list'%}">Listes des boosts</a>
 
                     </div>
                 </div>
