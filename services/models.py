@@ -1,12 +1,9 @@
 from django.db import models
 from django import forms
 # Create your models here.
-from django.db import models
-from django.contrib.auth.models import AbstractUser
-
 from django.conf import settings
 from django.db import models
-
+from django.utils import timezone
 
 
 class Campaign(models.Model):
@@ -86,45 +83,76 @@ class Audience(models.Model):
 from django.db import models
 from django.conf import settings
 
+
 class PostPublication(models.Model):
     POST_TYPE_CHOICES = (
         ('message', 'Message'),
         ('image', 'Image'),
         ('video', 'Vidéo'),
     )
-    id_publication = models.CharField(max_length=255,primary_key=True)  # Assurez-vous que cela est correct
-    post_type = models.CharField(max_length=10, choices=POST_TYPE_CHOICES)
+    id_publication = models.CharField(max_length=255, unique=True)
+    post_type = models.CharField(max_length=50)
     message = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
-    video = models.FileField(upload_to='videos/', blank=True, null=True)
-    description = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    comment_count = models.IntegerField(default=0)
+    like_count = models.IntegerField(default=0)
+    image = models.ImageField(upload_to='images/', blank=True, null=True)
+    video = models.FileField(upload_to='videos/', blank=True, null=True)
+
+    # Changer les noms des relations pour éviter les conflits
+    post_likes = models.ManyToManyField('Like', related_name='liked_publications', blank=True)
+    post_comments = models.ManyToManyField('Comment', related_name='commented_publications', blank=True)
 
     def __str__(self):
-        return f'{self.post_type} - {self.id_publication}'
+        return self.message or "Publication sans message"
 
-
-
+    def update_like_and_comment_counts(self):
+        """
+        Met à jour les attributs like_count et comment_count en fonction du nombre de likes et de commentaires liés.
+        """
+        # Utilisation des méthodes des classes Like et Comment
+        self.like_count = Like.count_likes_for_post(self.id_publication)
+        self.comment_count = Comment.count_comments_for_post(self.id_publication)
+        self.save()  # Sauvegarde les modifications dans la base de données
 
 
 class Like(models.Model):
-    post = models.ForeignKey(PostPublication, related_name='likes', on_delete=models.CASCADE)  # Utiliser 'likes' comme related_name
-    liker_id = models.CharField(max_length=255)  # ID de l'utilisateur qui a liké depuis Facebook
-    liker_name = models.CharField(max_length=255)  # Nom de l'utilisateur qui a liké
+    liker_id = models.CharField(max_length=255)
+    liker_name = models.CharField(max_length=255)
+
+    # Changer le related_name pour éviter les conflits
+    post = models.ForeignKey(PostPublication, related_name='likes', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Like by {self.liker_name} on {self.post_type}'
+        return f"{self.liker_name} a aimé la publication {self.post.id_publication}"
 
+    @classmethod
+    def count_likes_for_post(cls, post_id):
+        """
+        Compte le nombre total de likes associés à une publication donnée.
+        """
+        return cls.objects.filter(post__id_publication=post_id).count()
 
 class Comment(models.Model):
-    post = models.ForeignKey(PostPublication, on_delete=models.CASCADE)
-    comment_id = models.CharField(max_length=255)
+    comment_id = models.CharField(max_length=255, unique=True)
     message = models.TextField()
     commenter_name = models.CharField(max_length=255)
     created_time = models.DateTimeField()
 
+    # Changer le related_name pour éviter les conflits
+    post = models.ForeignKey(PostPublication, related_name='comments', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.commenter_name} a commenté : {self.message}"
+
+    @classmethod
+    def count_comments_for_post(cls, post_id):
+        """
+        Compte le nombre total de commentaires associés à une publication donnée.
+        """
+        return cls.objects.filter(post__id_publication=post_id).count()
 
 class BoostedPost(models.Model):
     post_id = models.CharField(max_length=100)
@@ -159,3 +187,15 @@ class FacebookPostInfo(models.Model):
 
     def __str__(self):
         return f"Post ID: {self.post_id} by {self.posted_by}"
+
+
+
+
+class CommentReply(models.Model):
+    comment_id = models.CharField(max_length=255)
+    reply_message = models.TextField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Réponse de {self.user} au commentaire {self.comment_id}"

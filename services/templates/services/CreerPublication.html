@@ -21,13 +21,13 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
-    /* Style des titres */
-    h2 {
-        text-align: center;
-        color: #333;
-        font-family: 'Arial', sans-serif;
-        margin-bottom: 20px;
-    }
+    /* Style des titres */h2 {
+            color: #FF5733; /* Couleur rouge-orangé */
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
 
     /* Style des champs de formulaire */
     form input, form select, form textarea {
@@ -121,7 +121,7 @@
 <body>
 
   <div class="container">
-    <h2>Publier sur Facebook</h2>
+    <h2>Creation publicite</h2>
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}

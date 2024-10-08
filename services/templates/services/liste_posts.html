@@ -5,14 +5,12 @@
         <div class="col-12 col-lg-12">
             <div class="card shadow-sm">
                 <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
-                    <h5 style="color: white; text-align: center; font-size: 24px;" class="mb-0">LISTE DES PUBLICATIONS</h5>
-                    <div class="d-sm-flex align-items-center justify-content-end">
-                        {% if user.role == 'admin' or user.role == 'directeur_marketing' %}
-                        <a href="{% url 'publish_content' %}" class="btn btn-danger btn-sm">
-                            <i class="fas fa-plus"></i> Créer une publicité
-                        </a>
-                        {% endif %}
-                    </div>
+                    <h5 class="mb-0">LISTE DES PUBLICATIONS</h5>
+                    {% if user.role == 'admin' or user.role == 'directeur_marketing' %}
+                    <a href="{% url 'publish_content' %}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-plus"></i> Créer une publication
+                    </a>
+                    {% endif %}
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -22,7 +20,6 @@
                                     <th>ID</th>
                                     <th>Message</th>
                                     <th>Création</th>
-                                    <th>Description</th>
                                     <th>Commentaires</th>
                                     <th>Likes</th>
                                     <th>Actions</th>
@@ -31,12 +28,39 @@
                             <tbody>
                                 {% for post in posts %}
                                 <tr>
-                                    <td>{{ post.id }}</td>
+                                    <td>{{ post.id_publication }}</td>
                                     <td>{{ post.message|default:"No Message" }}</td>
-                                    <td>{{ post.created_at }}</td>
-                                    <td>{{ post.description }}</td>
-                                    <td>{{ post.comment.count }}</td>
-                                    <td>{{ post.like.count }}</td>
+                                    <td>{{ post.created_at|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#comments-{{ post.id_publication }}">
+                                            Voir {{ post.comment_count }} commentaires
+                                        </button>
+                                        <div id="comments-{{ post.id_publication }}" class="collapse">
+                                            <ul class="list-group mt-2">
+                                                {% for comment in post.comments_list %}
+                                                    <li class="list-group-item">
+                                                        <strong>{{ comment.commenter_name }}</strong>: {{ comment.message }}
+                                                        <small class="text-muted"> - {{ comment.created_time|date:"d/m/Y H:i" }}</small>
+                                                        <a href="{% url 'repondre_commentaire' comment.comment_id %}" class="btn btn-warning btn-sm mt-1">
+                                                            <i class="fas fa-reply"></i> Répondre
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#likes-{{ post.id_publication }}">
+                                             {{ post.like_count }} likes
+                                        </button>
+                                        <div id="likes-{{ post.id_publication }}" class="collapse">
+                                            <ul class="list-group mt-2">
+                                                {% for like in post.likes_list %}
+                                                    <li class="list-group-item">{{ like.liker_name }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </td>
                                     <td>
                                         {% if post.id_publication %}
                                             <a href="{% url 'edit_post' post.id_publication %}" class="btn btn-warning btn-sm">
@@ -45,7 +69,7 @@
                                         {% else %}
                                             <span class="text-muted">Modifier indisponible</span>
                                         {% endif %}
-                                        <a href="{% url 'delete_post' post.id %}" class="btn btn-danger btn-sm">
+                                        <a href="{% url 'delete_post' post.id_publication %}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette publication ?');">
                                             <i class="fas fa-trash"></i> Supprimer
                                         </a>
                                     </td>
@@ -60,35 +84,48 @@
     </div>
 </div>
 
-<!-- Toast Notification -->
-<div class="toast" id="successToast" style="position: absolute; top: 20px; right: 20px;" data-delay="3000">
-    <div class="toast-header">
-        <strong class="mr-auto">Notification</strong>
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="toast-body">
-        {% if messages %}
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-        {% endif %}
-    </div>
-</div>
-
+<!-- Script pour contrôler et mettre à jour les publications régulièrement -->
 <script>
-    $(document).ready(function() {
-        $('#dataTable3').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/French.json"
+    // Fonction pour vérifier l'état des publications sur Facebook
+    function checkPublicationStatus() {
+        $.ajax({
+            url: "{% url 'check_publication_status' %}", // URL vers la vue Django qui traite la requête
+            type: 'GET',
+            success: function (data) {
+                // Actualiser la DataTable avec les nouvelles données
+                updateDataTable(data.posts);
+            },
+            error: function (xhr, status, error) {
+                console.log("Erreur lors de la vérification de l'état des publications : ", error);
             }
         });
+    }
 
-        // Afficher le toast si des messages sont présents
-        if ($('.toast-body').text().trim() !== '') {
-            $('#successToast').toast('show');
-        }
+    // Fonction pour mettre à jour les lignes de la DataTable
+    function updateDataTable(posts) {
+        var table = $('#dataTable3').DataTable();
+        table.clear();  // Vider la table
+
+        // Ajouter les nouvelles données
+        posts.forEach(function(post) {
+            table.row.add([
+                post.id_publication,
+                post.message || 'No Message',
+                new Date(post.created_at).toLocaleDateString() + ' ' + new Date(post.created_at).toLocaleTimeString(),
+                post.comment_count,
+                post.like_count,
+                '<a href="/edit_post/' + post.id_publication + '" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Modifier</a>' +
+                '<a href="/delete_post/' + post.id_publication + '" class="btn btn-danger btn-sm" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer cette publication ?\');"><i class="fas fa-trash"></i> Supprimer</a>'
+            ]).draw(false);  // Redessiner la table
+        });
+    }
+
+    // Rafraîchir la table toutes les 60 secondes (1 minute)
+    setInterval(checkPublicationStatus, 60000);  // 60000 ms = 60 secondes
+
+    // Appel initial pour charger les données au démarrage
+    $(document).ready(function() {
+        checkPublicationStatus();
     });
 </script>
 {% endblock %}

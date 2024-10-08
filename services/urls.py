@@ -38,11 +38,12 @@ path('afficher-publications/', afficher_publications, name='afficher_publication
 path('like_publication/', like_publication, name='like_publication'),
 path('edit-post/<str:pk>/', EditPostView.as_view(), name='edit_post'),  # Changement ici
 path('delete-post/<str:pk>/', DeletePostView.as_view(), name='delete_post'),
-# path('get-publications/', get_publications, name='get_publications'),
-# path('save-facebook-posts/', SaveFacebookPostView.as_view(), name='save_facebook_posts'),
+path('publicationdetail/<str:pk>/',detailPublicationView.as_view(), name='publicationdetail'),
+ path('check_publication_status/', views.check_publication_status, name='check_publication_status'),
 
 
-path("chatter",views.ChatsViews, name="chat"),
+
+path('<int:pk>/repondre-commentaire/', RepondreCommentaireView.as_view(), name='repondre_commentaire'),
 path("profile",views.ProfileViews, name="profil"),
 
 

@@ -8,7 +8,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Créer une Campagne</title>
+  <title>Créer une publication</title>
   <style>
         body {
             background-image: url('{% static "images/OIP.jpg" %}');
@@ -125,7 +125,7 @@
         {{ form.as_p }}
         <button type="submit">CRÉER</button> <br>
         <button type="reset" class="btn-reset">Annuler</button> <br>
-        <a href="{% url 'CampagneList' %}" class="btn btn-dark">Retour</a>
+        <a href="{% url 'liste_posts' %}" class="btn btn-dark">Retour</a>
     </form>
   </div>
 </body>

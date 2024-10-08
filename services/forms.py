@@ -127,14 +127,65 @@ class PostPublicationForm(forms.ModelForm):
 
 
 
+class EditPostPublicationForm(forms.ModelForm):
+    class Meta:
+        model = PostPublication
+        fields = ['post_type', 'message', 'image', 'video', 'description']
+
+    # Choix du type de publication (le même que dans le modèle)
+    POST_TYPE_CHOICES = (
+        ('message', 'Message'),
+        ('image', 'Image'),
+        ('video', 'Vidéo'),
+    )
+
+    post_type = forms.ChoiceField(label='Type de publication', choices=POST_TYPE_CHOICES)
+    # Champs pour les différents types de publication
+    message = forms.CharField(label='Message', max_length=255, widget=forms.Textarea, required=False)
+    image = forms.ImageField(label='Sélectionner une image', required=False)
+    video = forms.FileField(label='Sélectionner une vidéo', required=False)
+    description = forms.CharField(label='Description', max_length=255, required=False)
+
+    # Validation du formulaire en fonction du type de publication sélectionné
+    def clean(self):
+        cleaned_data = super().clean()
+        post_type = cleaned_data.get('post_type')
+
+        if post_type == 'message' and not cleaned_data.get('message'):
+            self.add_error('message', 'Le message est obligatoire pour une publication de type message.')
+
+        if post_type == 'image':
+            if not cleaned_data.get('message'):
+                self.add_error('message', 'Le message est obligatoire pour une publication de type image.')
+            if not cleaned_data.get('image'):
+                self.add_error('image', 'L\'image est obligatoire pour une publication de type image.')
+
+        if post_type == 'video':
+            if not cleaned_data.get('description'):
+                self.add_error('description', 'La description est obligatoire pour une publication de type vidéo.')
+            if not cleaned_data.get('video'):
+                self.add_error('video', 'La vidéo est obligatoire pour une publication de type vidéo.')
+
+        return cleaned_data
+
 
 from .models import Campaign, BoostedPost
-
-
-
 
 class BoostedPostForm(forms.ModelForm):
     class Meta:
         model = BoostedPost
         fields = ['post_id', 'page_id', 'ad_set_id']
 
+
+
+
+
+from .models import CommentReply
+
+class CommentReplyForm(forms.ModelForm):
+    class Meta:
+        model = CommentReply
+        fields = ['reply_message']
+        widgets = {
+            'reply_message': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Réponse au commentaire...'})
+        }
