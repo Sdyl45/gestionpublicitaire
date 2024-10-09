@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8dcb451-7f46-4278-9331-23e5d3c72517" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/services/templates/services/confirm_delete.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/GestionPublicitaire.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GestionPublicitaire.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/templates/services/liste_posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/services/liste_posts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -110,7 +110,8 @@ class CreerCampagneView(LoginRequiredMixin, CreateView):
             form.add_error(None, f"Une erreur s'est produite : {str(e)}")
             return self.form_invalid(form)
 
-
+import logging
+logger = logging.getLogger(__name__)
 class modifierCampagneView(LoginRequiredMixin, UpdateView):
     template_name = 'services/MesCampagme.html'
     model = Campaign
