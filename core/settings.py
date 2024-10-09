@@ -140,3 +140,15 @@ MEDIA_ROOT = BASE_DIR / 'media'  # Créez un dossier 'media' à la racine de vot
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+# Configuration de Cloudinary
+cloudinary.config(
+    cloud_name = 'dtylzz2iu',
+    api_key = '639229414146889',
+    api_secret = 'tbG6cUvsqR5Trt9fBT_wpTxATHo'
+)

@@ -87,9 +87,9 @@ class LocationForm(forms.ModelForm):
 class PostPublicationForm(forms.ModelForm):
     class Meta:
         model = PostPublication
-        fields = ['post_type', 'message', 'image', 'video', 'description']
+        fields = ['post_type', 'message', 'link', 'image', 'video', 'description']  # Ajout du champ link
 
-    # Choix du type de publication (le même que dans le modèle)
+    # Choix du type de publication
     POST_TYPE_CHOICES = (
         ('message', 'Message'),
         ('image', 'Image'),
@@ -97,8 +97,8 @@ class PostPublicationForm(forms.ModelForm):
     )
 
     post_type = forms.ChoiceField(label='Type de publication', choices=POST_TYPE_CHOICES)
-    # Champs pour les différents types de publication
     message = forms.CharField(label='Message', max_length=255, widget=forms.Textarea, required=False)
+    link = forms.URLField(label='Lien', required=False, max_length=255, widget=forms.URLInput(attrs={'placeholder': 'https://exemple.com'}))  # Champ link
     image = forms.ImageField(label='Sélectionner une image', required=False)
     video = forms.FileField(label='Sélectionner une vidéo', required=False)
     description = forms.CharField(label='Description', max_length=255, required=False)
@@ -108,6 +108,7 @@ class PostPublicationForm(forms.ModelForm):
         cleaned_data = super().clean()
         post_type = cleaned_data.get('post_type')
 
+        # Validation des messages
         if post_type == 'message' and not cleaned_data.get('message'):
             self.add_error('message', 'Le message est obligatoire pour une publication de type message.')
 

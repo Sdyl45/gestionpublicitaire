@@ -28,23 +28,29 @@
                             <tbody>
                                 {% for post in posts %}
                                 <tr>
-                                    <td>{{ post.id_publication }}</td>
+                                    <td>{{ post.id }}</td>
                                     <td>{{ post.message|default:"No Message" }}</td>
                                     <td>{{ post.created_at|date:"d/m/Y H:i" }}</td>
                                     <td>
                                         <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#comments-{{ post.id_publication }}">
                                             Voir {{ post.comment_count }} commentaires
                                         </button>
-                                        <div id="comments-{{ post.id_publication }}" class="collapse">
+                                        <div id="comments-{{ post.id }}" class="collapse">
                                             <ul class="list-group mt-2">
                                                 {% for comment in post.comments_list %}
-                                                    <li class="list-group-item">
-                                                        <strong>{{ comment.commenter_name }}</strong>: {{ comment.message }}
-                                                        <small class="text-muted"> - {{ comment.created_time|date:"d/m/Y H:i" }}</small>
-                                                        <a href="{% url 'repondre_commentaire' comment.comment_id %}" class="btn btn-warning btn-sm mt-1">
-                                                            <i class="fas fa-reply"></i> Répondre
-                                                        </a>
-                                                    </li>
+                                                <li class="list-group-item">
+                                                    <strong>{{ comment.commenter_name }}</strong>: {{ comment.message }}
+                                                    <small class="text-muted"> - {{ comment.created_time|date:"d/m/Y H:i" }}</small>
+
+                                                    <button class="btn btn-secondary btn-sm mt-1 reply-button" data-comment-id="{{ comment.comment_id }}">
+                                                        <i class="fas fa-reply"></i> Répondre
+                                                    </button>
+
+                                                    <div class="reply-form d-none mt-2" id="reply-form-{{ comment.comment_id }}">
+                                                        <textarea class="form-control" rows="2" placeholder="Écrivez votre réponse..."></textarea>
+                                                        <button class="btn btn-primary btn-sm mt-1 send-reply" data-comment-id="{{ comment.comment_id }}">Envoyer</button>
+                                                    </div>
+                                                </li>
                                                 {% endfor %}
                                             </ul>
                                         </div>
@@ -53,7 +59,7 @@
                                         <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#likes-{{ post.id_publication }}">
                                              {{ post.like_count }} likes
                                         </button>
-                                        <div id="likes-{{ post.id_publication }}" class="collapse">
+                                        <div id="likes-{{ post.id }}" class="collapse">
                                             <ul class="list-group mt-2">
                                                 {% for like in post.likes_list %}
                                                     <li class="list-group-item">{{ like.liker_name }}</li>
@@ -69,7 +75,7 @@
                                         {% else %}
                                             <span class="text-muted">Modifier indisponible</span>
                                         {% endif %}
-                                        <a href="{% url 'delete_post' post.id_publication %}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette publication ?');">
+                                        <a href="" class="btn btn-danger btn-sm">
                                             <i class="fas fa-trash"></i> Supprimer
                                         </a>
                                     </td>
@@ -86,16 +92,54 @@
 
 <!-- Script pour contrôler et mettre à jour les publications régulièrement -->
 <script>
+    $(document).on('click', '.reply-button', function() {
+        var commentId = $(this).data('comment-id');
+        $('#reply-form-' + commentId).toggleClass('d-none');  // Afficher ou masquer le formulaire de réponse
+    });
+
+    $(document).on('click', '.send-reply', function() {
+        var commentId = $(this).data('comment-id');
+        var message = $('#reply-form-' + commentId).find('textarea').val();
+
+        if (message.trim() === '') {
+            alert("Le message ne peut pas être vide.");
+            return;
+        }
+
+        // Appel AJAX pour envoyer la réponse à l'API
+        $.ajax({
+            url: "{% url 'send_reply_to_api' %}", // URL vers votre vue Django qui gère l'envoi à l'API
+            type: 'POST',
+            data: {
+                comment_id: commentId,
+                message: message,
+                csrfmiddlewaretoken: '{{ csrf_token }}'  // Inclure le token CSRF
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert("Réponse envoyée avec succès.");
+                    $('#reply-form-' + commentId).addClass('d-none');  // Masquer le formulaire de réponse
+                    // Optionnel: Rafraîchir la liste des commentaires
+                } else {
+                    alert("Erreur lors de l'envoi de la réponse : " + response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Erreur lors de l'envoi de la réponse :", error);
+            }
+        });
+    });
+
     // Fonction pour vérifier l'état des publications sur Facebook
     function checkPublicationStatus() {
         $.ajax({
             url: "{% url 'check_publication_status' %}", // URL vers la vue Django qui traite la requête
             type: 'GET',
-            success: function (data) {
+            success: function(data) {
                 // Actualiser la DataTable avec les nouvelles données
                 updateDataTable(data.posts);
             },
-            error: function (xhr, status, error) {
+            error: function(xhr, status, error) {
                 console.log("Erreur lors de la vérification de l'état des publications : ", error);
             }
         });

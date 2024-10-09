@@ -1,10 +1,11 @@
+from cloudinary.utils import cloudinary_url
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.template.backends import django
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from facebook_business.adobjects.page import Page
-
+import cloudinary.uploader
 from core.api.createCampaign import create_campaign
 from core.api.createPublicite import create_ad_set
 from .forms import CampaignForm, AudienceForm,LocationForm,PubliciteForm,EditPudForm,EditCampagneForm,PostPublicationForm,BoostedPostForm,EditPostPublicationForm
@@ -109,11 +110,66 @@ class CreerCampagneView(LoginRequiredMixin, CreateView):
             form.add_error(None, f"Une erreur s'est produite : {str(e)}")
             return self.form_invalid(form)
 
-class modifierCampagneView(LoginRequiredMixin,UpdateView):
+
+class modifierCampagneView(LoginRequiredMixin, UpdateView):
     template_name = 'services/MesCampagme.html'
     model = Campaign
     form_class = EditCampagneForm
     success_url = reverse_lazy('CampagneList')
+
+    def form_valid(self, form):
+        try:
+            # Récupérer l'instance actuelle de la campagne
+            instance = form.save(commit=False)
+
+            # Tenter de mettre à jour la campagne sur Facebook
+            facebook_id = instance.facebookCampaign_ID
+
+            # Appel à la fonction de mise à jour de la campagne
+            success = update_facebook_campaign(
+                facebook_id,
+                name=form.cleaned_data.get('name'),
+                objective=form.cleaned_data.get('objective'),
+                budget=form.cleaned_data.get('budget'),
+                status=form.cleaned_data.get('status')
+            )
+
+            if not success:
+                form.add_error(None, "La mise à jour de la campagne sur Facebook a échoué.")
+                return self.form_invalid(form)
+
+            # Sauvegarder les modifications locales si la mise à jour sur Facebook est réussie
+            instance.save()
+
+            return super().form_valid(form)
+
+        except Exception as e:
+            form.add_error(None, f"Une erreur s'est produite : {str(e)}")
+            return self.form_invalid(form)
+
+
+# Fonction de mise à jour de la campagne sur Facebook
+def update_facebook_campaign(campaign_id, name, objective, budget, status):
+    """
+    Met à jour une campagne Facebook avec les informations fournies.
+    """
+    update_url = f"https://graph.facebook.com/v17.0/{campaign_id}"
+    params = {
+        'access_token': '<YOUR_ACCESS_TOKEN>',  # Remplacez par votre jeton d'accès
+        'name': name,
+        'objective': objective,
+        'daily_budget': budget,  # Assurez-vous que ce soit bien au format requis par l'API
+        'status': status
+    }
+
+    # Envoyer la requête de mise à jour à l'API Facebook
+    try:
+        response = requests.post(update_url, params=params)
+        response.raise_for_status()  # Vérifier s'il y a une erreur
+        return True
+    except requests.RequestException as e:
+        logger.error(f"Erreur lors de la mise à jour de la campagne Facebook: {e}")
+        return False
 
 
 class deletecampagneView(LoginRequiredMixin,DeleteView):
@@ -320,23 +376,33 @@ def ProfileViews(request):
 
 
 
-
+# Configuration de Cloudinary
+cloudinary.config(
+    cloud_name="dtylzz2iu",
+    api_key="639229414146889",
+    api_secret="tbG6cUvsqR5Trt9fBT_wpTxATHo",
+    secure=True
+)
 
 class ListPostsView(LoginRequiredMixin, TemplateView):
     """
-    Vue Django pour lister et enregistrer les publications d'une page Facebook dans un DataTable et en base de données.
+    Vue Django pour lister et enregistrer les publications d'une page Facebook dans un DataTable
+    et enregistrer les informations des likes et commentaires en base de données.
     """
     template_name = 'services/liste_posts.html'
     page_id = '434662436390612'  # ID de la page Facebook
-    access_token = 'EAAHZAsb1umoIBOZBO9Ng0uugJZCZAEiITAeizYgGRofUEfZCWztBTepZAlIIATL902DKAotIf1IbdZAZC1yZBLZChzagjobnvAEJZACvXa76a3tLq2DLkwjsTPGJTUhotxDPOkpNRZBkrJ6EWZCJTEgrt7CX3SUQF5ZBdZCpOHxVl8cdd47hcZB7EMTGRtR17ZAb3lPH7WZCZCDWhgFcfN8DC2bEI6DlKlPgz5ZC'  # Jeton d'accès Facebook
+    access_token = 'EAAHZAsb1umoIBOwNA6CucCMd1SBJqZARrUgzz7HTCkdd4ZAdxqISzEuQrfLINrwA0gD9EtCZAodU1X2I5MfSpkHDTVO0ZCrQ8VCL2vn1ZAVJ1CKOJxXsIgjXJr22kZC3P6JyO7zZBc5SloOBLgDQ877GCwYePx10a1fEZANmX2Q3NCr09uZBwdr8Je2GeQAPq7TneikReXApvrWwGOsgsOyhp8Fyxz'  # Jeton d'accès Facebook
 
     def get_context_data(self, **kwargs):
         """
-        Ajoute les publications Facebook au contexte pour affichage dans le template.
+        Ajoute les publications Facebook, les likes et les commentaires au contexte pour affichage dans le template.
         """
         context = super().get_context_data(**kwargs)
+
         # Appel API pour récupérer les publications Facebook
         posts = self.get_posts()
+
+        # Ajouter les publications, likes et commentaires au contexte
         context['posts'] = posts
         return context
 
@@ -345,69 +411,52 @@ class ListPostsView(LoginRequiredMixin, TemplateView):
         Récupère les publications de la page Facebook via l'API, les enregistre en base de données,
         et renvoie une liste de publications avec leurs likes et commentaires.
         """
-        posts = []
-        next_page_url = f'https://graph.facebook.com/v17.0/{self.page_id}/posts?access_token={self.access_token}'
+        get_posts_url = f'https://graph.facebook.com/v17.0/{self.page_id}/posts'
+        get_posts_params = {
+            'access_token': self.access_token
+        }
 
-        while next_page_url:
-            response = requests.get(next_page_url)
-            if response.status_code == 200:
-                info_post = response.json()
-                posts_data = info_post.get('data', [])
-                posts.extend(posts_data)  # Ajouter les nouvelles publications à la liste
+        response = requests.get(get_posts_url, params=get_posts_params)
 
-                # Récupérer les IDs des publications déjà présentes en base de données
-                existing_ids = set(PostPublication.objects.values_list('id_publication', flat=True))
+        if response.status_code == 200:
+            info_post = response.json()
+            posts = info_post.get('data', [])
 
-                for post in posts_data:
-                    post_id = post.get('id')
-                    if post_id in existing_ids:
-                        continue
+            # Récupérer les IDs des publications déjà présentes en base de données
+            existing_ids = set(PostPublication.objects.values_list('id_publication', flat=True))
 
-                    # Sauvegarder la publication en base de données
-                    post_obj, created = PostPublication.objects.get_or_create(
-                        id_publication=post_id,
-                        defaults={
-                            'post_type': post.get('type', ''),
-                            'message': post.get('message', ''),
-                            'description': post.get('story', ''),
-                            'created_at': post.get('created_time'),
-                            'user': self.request.user,
-                            'comment_count': post.get('comments', {}).get('summary', {}).get('total_count', 0),
-                            'like_count': post.get('likes', {}).get('summary', {}).get('total_count', 0)
-                        }
-                    )
+            for post in posts:
+                post_id = post.get('id')
+                if post_id in existing_ids:
+                    continue  # Passer les publications déjà présentes
 
-                # Récupérer les likes et commentaires pour chaque publication
-                for post in posts_data:
-                    post_id = post.get('id')
-                    post_obj = PostPublication.objects.get(id_publication=post_id)
-                    self._fetch_likes(post_obj)
-                    self._fetch_comments(post_obj)
+                # Créer ou obtenir une instance de PostPublication
+                post_obj, created = PostPublication.objects.get_or_create(
+                    id_publication=post_id,
+                    defaults={
+                        'post_type': post.get('type', ''),
+                        'message': post.get('message', ''),
+                        'description': post.get('story', ''),
+                        'created_at': post.get('created_time'),
+                        'user': self.request.user
+                    }
+                )
 
-                    # Mettre à jour le nombre total de likes et de commentaires après récupération
-                    post_obj.update_like_and_comment_counts()
+                # Récupérer les likes et les commentaires
+                self._fetch_likes(post_obj)
+                self._fetch_comments(post_obj)
 
-                # Vérifier si une page suivante est disponible
-                next_page_url = info_post.get('paging', {}).get('next')
-            else:
-                break
+            return posts
+        else:
+            print(f"Erreur lors de la récupération des publications: {response.status_code}")
+            return []
 
-        # Récupérer les publications enregistrées pour affichage
-        publications = PostPublication.objects.filter(id_publication__in=[p.get('id') for p in posts])
-        for publication in publications:
-            publication.likes_list = list(publication.post_likes.all())  # Convertir les likes en liste
-            publication.comments_list = list(publication.post_comments.all())  # Convertir les commentaires en liste
-
-        return publications
-
-    def _fetch_likes(self, post):
+    def _fetch_likes(self, post_obj):
         """
         Récupère les likes associés à une publication Facebook et les enregistre.
         """
-        likes_url = f"https://graph.facebook.com/v17.0/{post.id_publication}/likes"
-        params = {
-            'access_token': self.access_token
-        }
+        likes_url = f"https://graph.facebook.com/v17.0/{post_obj.id_publication}/likes"
+        params = {'access_token': self.access_token}
         response = requests.get(likes_url, params=params)
 
         if response.status_code == 200:
@@ -419,18 +468,18 @@ class ListPostsView(LoginRequiredMixin, TemplateView):
                 # Enregistrer le like dans la base de données
                 Like.objects.update_or_create(
                     liker_id=liker_id,
-                    post=post,
+                    post=post_obj,
                     defaults={'liker_name': liker_name}
                 )
+        else:
+            print(f"Erreur lors de la récupération des likes : {response.text}")
 
-    def _fetch_comments(self, post):
+    def _fetch_comments(self, post_obj):
         """
         Récupère les commentaires associés à une publication Facebook et les enregistre.
         """
-        comments_url = f"https://graph.facebook.com/v17.0/{post.id_publication}/comments"
-        params = {
-            'access_token': self.access_token
-        }
+        comments_url = f"https://graph.facebook.com/v17.0/{post_obj.id_publication}/comments"
+        params = {'access_token': self.access_token}
         response = requests.get(comments_url, params=params)
 
         if response.status_code == 200:
@@ -444,13 +493,20 @@ class ListPostsView(LoginRequiredMixin, TemplateView):
                 # Enregistrer le commentaire dans la base de données
                 Comment.objects.update_or_create(
                     comment_id=comment_id,
-                    post=post,
+                    post=post_obj,
                     defaults={
                         'message': message,
                         'commenter_name': commenter_name,
                         'created_time': created_time,
                     }
                 )
+        else:
+            print(f"Erreur lors de la récupération des commentaires : {response.text}")
+
+
+
+
+
 
 
 
@@ -460,18 +516,22 @@ class PublishContentView(LoginRequiredMixin, CreateView):
     form_class = PostPublicationForm
     success_url = reverse_lazy('liste_posts')
 
-    # ID de la page Facebook et jeton d'accès
     page_id = '434662436390612'
-    access_token = 'EAAHZAsb1umoIBOZBO9Ng0uugJZCZAEiITAeizYgGRofUEfZCWztBTepZAlIIATL902DKAotIf1IbdZAZC1yZBLZChzagjobnvAEJZACvXa76a3tLq2DLkwjsTPGJTUhotxDPOkpNRZBkrJ6EWZCJTEgrt7CX3SUQF5ZBdZCpOHxVl8cdd47hcZB7EMTGRtR17ZAb3lPH7WZCZCDWhgFcfN8DC2bEI6DlKlPgz5ZC'
-
+    access_token = 'EAAHZAsb1umoIBOwNA6CucCMd1SBJqZARrUgzz7HTCkdd4ZAdxqISzEuQrfLINrwA0gD9EtCZAodU1X2I5MfSpkHDTVO0ZCrQ8VCL2vn1ZAVJ1CKOJxXsIgjXJr22kZC3P6JyO7zZBc5SloOBLgDQ877GCwYePx10a1fEZANmX2Q3NCr09uZBwdr8Je2GeQAPq7TneikReXApvrWwGOsgsOyhp8Fyxz'
     media_directory = r'C:\Users\LYAN\PycharmProjects\GestionPublicitaire\static\images'
 
     def form_valid(self, form):
         post = form.save(commit=False)
         post.user = self.request.user
 
+        # Préparer les URLs des médias pour publication
+        media_urls = self._upload_media_to_cloudinary(post)
+
         # Publier le contenu sur Facebook
-        response = self._publish_to_facebook(post)
+        if 'video_url' in media_urls:
+            response = self._publish_video_to_facebook(post, media_urls)
+        else:
+            response = self._publish_to_facebook(post, media_urls)
 
         if 'error' in response:
             form.add_error(None, f"Erreur lors de la publication sur Facebook: {response['error']}")
@@ -480,67 +540,68 @@ class PublishContentView(LoginRequiredMixin, CreateView):
         post.id_publication = response.get('id')
         post.save()
 
-        # Récupérer les commentaires et likes après la publication
-        self._fetch_comments(post)
-        self._fetch_likes(post)
-
         return super().form_valid(form)
 
-    def _publish_to_facebook(self, post):
+    def _upload_media_to_cloudinary(self, post):
         """
-        Publie le contenu sur Facebook et renvoie la réponse.
+        Upload les images et vidéos sur Cloudinary et retourne les URLs optimisées.
+        """
+        media_urls = {}
+
+        # Upload image si disponible
+        if post.image:
+            image_path = os.path.join(self.media_directory, post.image.name)
+            upload_result = cloudinary.uploader.upload(image_path)
+            media_urls['image_url'] = upload_result['secure_url']  # URL sécurisée de l'image
+
+        # Upload vidéo si disponible
+        if post.video:
+            video_path = os.path.join(self.media_directory, post.video.name)
+            upload_result = cloudinary.uploader.upload_large(video_path, resource_type="video")
+            media_urls['video_url'] = upload_result['secure_url']  # URL sécurisée de la vidéo
+
+        return media_urls
+
+    def _publish_to_facebook(self, post, media_urls):
+        """
+        Publie un message avec une image sur Facebook.
         """
         url = f"https://graph.facebook.com/v17.0/{self.page_id}/feed"
+
         params = {
             'message': post.message,
-            'access_token': self.access_token
+            'access_token': self.access_token,
         }
 
-        if post.image:  # Ajouter une image si elle existe
-            image_path = f"{self.media_directory}/{post.image.name}"
-            params['source'] = open(image_path, 'rb')
+        # Ajouter l'URL de l'image si elle existe
+        if 'image_url' in media_urls:
+            params['image'] = media_urls['image_url']  # Ajoute l'image de Cloudinary
 
+        # Publier la requête
         response = requests.post(url, data=params)
-
         return response.json()
 
-    def _fetch_comments(self, post):
-        comments_url = f"https://graph.facebook.com/v17.0/{post.id_publication}/comments"
-        params = {'access_token': self.access_token}
-        response = requests.get(comments_url, params=params)
+    def _publish_video_to_facebook(self, post, media_urls):
+        """
+        Publie une vidéo sur Facebook via l'API vidéo.
+        """
+        url = f"https://graph.facebook.com/v17.0/{self.page_id}/videos"
+        params = {
+            'description': post.message,  # Utilise le message comme description de la vidéo
+            'access_token': self.access_token,
+        }
 
-        if response.status_code == 200:
-            comments_data = response.json().get('data', [])
-            post.comment_count = len(comments_data)
-            post.save()
-            for comment in comments_data:
-                Comment.objects.update_or_create(
-                    comment_id=comment['id'],
-                    post=post,
-                    defaults={
-                        'message': comment.get('message', 'Aucun message'),
-                        'commenter_name': comment.get('from', {}).get('name', 'Inconnu'),
-                        'created_time': comment['created_time'],
-                    }
-                )
+        # Ajouter l'URL de la vidéo si elle existe
+        if 'video_url' in media_urls:
+            params['file_url'] = media_urls['video_url']  # Ajoute la vidéo de Cloudinary
 
-    def _fetch_likes(self, post):
-        likes_url = f"https://graph.facebook.com/v17.0/{post.id_publication}/likes"
-        params = {'access_token': self.access_token}
-        response = requests.get(likes_url, params=params)
+        # Publier la vidéo
+        response = requests.post(url, data=params)
+        return response.json()
 
-        if response.status_code == 200:
-            likes_data = response.json().get('data', [])
-            post.like_count = len(likes_data)
-            post.save()
-            for like in likes_data:
-                Like.objects.update_or_create(
-                    post=post,
-                    liker_id=like['id'],
-                    defaults={
-                        'liker_name': like.get('name', 'Inconnu')
-                    }
-                )
+
+
+
 
 
 class EditPostView(LoginRequiredMixin, UpdateView):
@@ -588,20 +649,54 @@ class EditPostView(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect(self.success_url)
 
 
-class DeletePostView(LoginRequiredMixin, DeleteView):
-    model = PostPublication
-    template_name = 'services/confirm_delete.html'
-    success_url = reverse_lazy('liste_posts')
 
-    def delete(self, request, *args, **kwargs):
-        messages.success(request, 'La publication a été supprimée avec succès.')
-        return super().delete(request, *args, **kwargs)
+
+
 
 class detailPublicationView(LoginRequiredMixin,DetailView):
     template_name = 'services/DetailPublication.html'
     model = PostPublication
     context_object_name = 'publication'
 
+class DeletePostView(LoginRequiredMixin,DeleteView):
+    model = PostPublication
+    template_name = 'services/confirm_delete.html'
+    success_url = reverse_lazy('liste_posts')
+
+
+
+@csrf_exempt  # Assurez-vous d'utiliser csrf_exempt uniquement si nécessaire
+def send_reply_to_api(request):
+    if request.method == 'POST':
+        comment_id = request.POST.get('comment_id')
+        message = request.POST.get('message')
+
+        # Logique pour envoyer la réponse à l'API
+        try:
+            # Remplacez par l'URL de votre API
+            api_url = 'https://api.example.com/reply'
+            payload = {
+                'comment_id': comment_id,
+                'message': message
+            }
+            response = requests.post(api_url, json=payload)
+
+            if response.status_code == 200:
+                # Enregistrer la réponse dans la base de données
+                Comment.objects.create(
+                    comment_id=comment_id,  # Utilisez un identifiant approprié
+                    message=message,
+                    commenter_name=request.user.username,  # Ou l'adapter selon vos besoins
+                    created_time=timezone.now(),
+                    post_id=...  # Assurez-vous de lier cela à la publication
+                )
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'error': 'Erreur de l\'API.'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Méthode non autorisée.'})
 
 
 def check_publication_status(request):
@@ -955,67 +1050,3 @@ def like_publication(request):
 
 
 
-
-from .forms import CommentReplyForm
-from .models import CommentReply
-
-class RepondreCommentaireView(LoginRequiredMixin, View):
-    template_name = 'services/chats.html'
-    access_token = 'EAAHZAsb1umoIBO4wmn4B9nKtOLHeCK6HKbDhh2YR7OoTqKZAZBZBZCe4K2B1MsLZArBbSZAFGcYa0UhjnxezcJhQZCz38Ct2FLZC08GqePYQRbQDIGoUXMOKsJdBRHQ38Skgsa4DAckc0HEFmsbUoKi4hKMVGe2KEn2wJX3LZBQNmeqqocX0bxGyGNgukEbLQGL0AwF19z2wPzUcyuGzO1vOPBlrfV'
-    context_object_name = 'commentaire'
-    def get(self, request, comment_id, *args, **kwargs):
-        form = CommentReplyForm()
-
-        # Récupérer le commentaire spécifique à partir de la base de données
-        commentaire = Comment.objects.filter(id=comment_id).first()
-
-        if not commentaire:
-            messages.error(request, "Commentaire non trouvé.")
-            return redirect('liste_posts')
-
-        # Passer le commentaire et le formulaire au template
-        return render(request, self.template_name, {
-            'form': form,
-            'comment': commentaire,
-            'comment_id': comment_id
-        })
-
-    def post(self, request, comment_id, *args, **kwargs):
-        form = CommentReplyForm(request.POST)
-        commentaire = Comment.objects.filter(id=comment_id).first()
-
-        if not commentaire:
-            messages.error(request, "Commentaire non trouvé.")
-            return redirect('liste_posts')
-
-        if form.is_valid():
-            reply_message = form.cleaned_data['reply_message']
-
-            # Publier la réponse via l'API Facebook
-            url = f"https://graph.facebook.com/v17.0/{comment_id}/comments"
-            payload = {
-                'message': reply_message,
-                'access_token': self.access_token
-            }
-            response = requests.post(url, data=payload)
-
-            if response.status_code == 200:
-                # Sauvegarder la réponse dans la base de données
-                CommentReply.objects.create(
-                    comment_id=comment_id,
-                    reply_message=reply_message,
-                    user=request.user,
-                    original_comment=commentaire  # Relie la réponse au commentaire original
-                )
-                messages.success(request, "Réponse publiée et sauvegardée avec succès.")
-            else:
-                messages.error(request, f"Erreur lors de la publication : {response.json()}")
-
-            return redirect('liste_posts')
-
-        # En cas d'erreur de formulaire, recharger le template avec le formulaire et le commentaire
-        return render(request, self.template_name, {
-            'form': form,
-            'comment': commentaire,
-            'comment_id': comment_id
-        })

@@ -37,13 +37,13 @@ path('liste-posts/', ListPostsView.as_view(), name='liste_posts'),
 path('afficher-publications/', afficher_publications, name='afficher_publications'),
 path('like_publication/', like_publication, name='like_publication'),
 path('edit-post/<str:pk>/', EditPostView.as_view(), name='edit_post'),  # Changement ici
-path('delete-post/<str:pk>/', DeletePostView.as_view(), name='delete_post'),
+path('delete_post/<pk>/effaccer', DeletePostView.as_view(), name='delete_post'),
 path('publicationdetail/<str:pk>/',detailPublicationView.as_view(), name='publicationdetail'),
  path('check_publication_status/', views.check_publication_status, name='check_publication_status'),
 
 
 
-path('<int:pk>/repondre-commentaire/', RepondreCommentaireView.as_view(), name='repondre_commentaire'),
+path('send_reply_to_api/', send_reply_to_api, name='send_reply_to_api'),
 path("profile",views.ProfileViews, name="profil"),
 
 

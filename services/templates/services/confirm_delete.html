@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">soumettre</button>
+</form>
+</body>
+</html>
+{% endblock %}

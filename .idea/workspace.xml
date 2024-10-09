@@ -5,19 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8dcb451-7f46-4278-9331-23e5d3c72517" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/services/templates/services/DetailPublication.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/templates/services/confirm_delete.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/GestionPublicitaire.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GestionPublicitaire.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0001_initial.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/services/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/templates/services/CreatePublication.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/services/CreatePublication.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/templates/services/CreerPublication.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/services/CreerPublication.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/templates/services/chats.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/services/chats.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/templates/services/liste_posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/services/liste_posts.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +57,7 @@
     &quot;Python.createPublicite.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;Python.recupLikeAndComment.executor&quot;: &quot;Run&quot;,
+    &quot;Python.views.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,

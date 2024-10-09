@@ -89,19 +89,23 @@ class PostPublication(models.Model):
         ('message', 'Message'),
         ('image', 'Image'),
         ('video', 'Vidéo'),
-    )
-    id_publication = models.CharField(max_length=255, unique=True)
-    post_type = models.CharField(max_length=50)
-    message = models.TextField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    comment_count = models.IntegerField(default=0)
-    like_count = models.IntegerField(default=0)
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
-    video = models.FileField(upload_to='videos/', blank=True, null=True)
+        ('link', 'Link'),
 
-    # Changer les noms des relations pour éviter les conflits
+    )
+
+    id_publication = models.CharField(max_length=255, unique=True)  # Identifiant unique de la publication
+    post_type = models.CharField(max_length=50, choices=POST_TYPE_CHOICES)  # Type de publication
+    message = models.TextField(blank=True, null=True)  # Contenu du message
+    description = models.TextField(blank=True, null=True)  # Description optionnelle
+    link = models.URLField(blank=True, null=True)  # Champ pour le lien
+    created_at = models.DateTimeField(auto_now_add=True)  # Date de création
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Référence à l'utilisateur
+    comment_count = models.IntegerField(default=0)  # Compteur de commentaires
+    like_count = models.IntegerField(default=0)  # Compteur de likes
+    image = models.ImageField(upload_to='images/', blank=True, null=True)  # Champ pour l'image
+    video = models.FileField(upload_to='videos/', blank=True, null=True)  # Champ pour la vidéo
+
+    # Relations avec Like et Comment
     post_likes = models.ManyToManyField('Like', related_name='liked_publications', blank=True)
     post_comments = models.ManyToManyField('Comment', related_name='commented_publications', blank=True)
 
